@@ -18,6 +18,6 @@ public class Category {
 
     private String categoryName;
 
-    @OneToMany//(mappedBy = "category")
+    @OneToMany(mappedBy = "category")
     private List<Restaurant> restaurantList;
 }
