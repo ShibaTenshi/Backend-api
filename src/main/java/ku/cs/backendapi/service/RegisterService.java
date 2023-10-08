@@ -3,6 +3,7 @@ package ku.cs.backendapi.service;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.exeption.MailAlreadyRegisterException;
 import ku.cs.backendapi.model.Register;
+import ku.cs.backendapi.model.Respond;
 import ku.cs.backendapi.repository.CustomerRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,12 @@ public class RegisterService {
         }
     }
 
-    public void createCustomer(Register customer) throws MailAlreadyRegisterException {
-        isEmailAvailable(customer.getEmail());
+    public Respond createCustomer(Register customer){
+        try {
+            isEmailAvailable(customer.getEmail());
+        } catch (MailAlreadyRegisterException e) {
+            return new Respond("Mail already exited");
+        }
 
         Customer record = modelMapper.map(customer, Customer.class);
 
@@ -36,5 +41,6 @@ public class RegisterService {
         record.setPassword(hashedPassword);
 
         repository.save(record);
+        return new Respond("OK");
     }
 }

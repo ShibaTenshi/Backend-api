@@ -32,10 +32,11 @@ public class TokenList {
         }
     }
 
-    public void isTokenContain(UUID tokenId) throws TokenNotfoundException {
+    public boolean isTokenContain(UUID tokenId){
         if(!tokenMap.containsKey(tokenId)) {
-            throw new TokenNotfoundException();
+            return false;
         }
+        return true;
     }
 
     public void removeToken(UUID tokenId) {

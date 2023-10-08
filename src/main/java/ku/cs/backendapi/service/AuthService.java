@@ -1,9 +1,12 @@
 package ku.cs.backendapi.service;
 
 import ku.cs.backendapi.entity.Customer;
+import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exeption.UserNotFoundException;
 import ku.cs.backendapi.model.Login;
+import ku.cs.backendapi.model.Respond;
 import ku.cs.backendapi.repository.CustomerRepository;
+import ku.cs.backendapi.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +18,22 @@ public class AuthService {
     TokenService tokenService;
 
     @Autowired
-    CustomerRepository repository;
+    CustomerRepository customerRepository;
+    @Autowired
+    RestaurantRepository restaurantRepository;
 
-    public String login(Login login) throws UserNotFoundException {
-        Customer record = repository.findByUsername(login.getUsername());
-        if (record == null) throw new UserNotFoundException();
-        return tokenService.createToken(record.getId()).toString();
+    public Respond loginCustomer(Login login){
+        Customer customer = customerRepository.findByUsername(login.getUsername());
+        if (customer == null) return new Respond("User not found");
+        String token = tokenService.createToken(customer.getId()).toString();
+        return new Respond("OK-" + token);
+    }
+
+    public Respond loginRestaurant(Login login){
+        Restaurant restaurant = restaurantRepository.findByUsername(login.getUsername());
+        if (restaurant == null) return new Respond("User not found");
+        String token = tokenService.createToken(restaurant.getId()).toString();
+        return new Respond("OK-" + token);
     }
 
     public void removeToken(UUID tokenID) {

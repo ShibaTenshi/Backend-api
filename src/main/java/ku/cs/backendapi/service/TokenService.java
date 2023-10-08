@@ -1,6 +1,7 @@
 package ku.cs.backendapi.service;
 
 import ku.cs.backendapi.exeption.TokenNotfoundException;
+import ku.cs.backendapi.model.Respond;
 import ku.cs.backendapi.model.TokenList;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +18,11 @@ public class TokenService {
         return tokenId;
     }
 
-    public UUID getUserId(UUID tokenId) throws TokenNotfoundException {
-        return tokenList.getUserId(tokenId);
-    }
-
-    public void validateToken(UUID tokenId) throws TokenNotfoundException {
-        tokenList.isTokenContain(tokenId);
+    public Respond validateToken(UUID tokenId){
+        if(tokenList.isTokenContain(tokenId)) {
+            return new Respond("OK");
+        }
+        return new Respond("Failed");
     }
 
     public void removeToken(UUID tokenId) {

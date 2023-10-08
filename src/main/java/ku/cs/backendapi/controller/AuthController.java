@@ -2,6 +2,7 @@ package ku.cs.backendapi.controller;
 
 import ku.cs.backendapi.exeption.UserNotFoundException;
 import ku.cs.backendapi.model.Login;
+import ku.cs.backendapi.model.Respond;
 import ku.cs.backendapi.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,10 +15,14 @@ public class AuthController {
     @Autowired
     AuthService service;
 
-    @PostMapping("/login")
-    @ResponseStatus(code = HttpStatus.OK)
-    public String login(@RequestBody Login login) throws UserNotFoundException {
-        return service.login(login);
+    @PostMapping("/login/customer")
+    public Respond loginCustomer(@RequestBody Login login){
+        return service.loginCustomer(login);
+    }
+
+    @PostMapping("/login/restaurant")
+    public Respond loginRestaurant(@RequestBody Login login){
+        return service.loginRestaurant(login);
     }
 
     @PostMapping("/logout/{token}")
