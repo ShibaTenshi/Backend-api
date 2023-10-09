@@ -25,14 +25,14 @@ public class AuthService {
     public Respond loginCustomer(Login login){
         Customer customer = customerRepository.findByUsername(login.getUsername());
         if (customer == null) return new Respond("User not found");
-        String token = tokenService.createToken(customer.getId()).toString();
+        String token = String.valueOf(tokenService.createToken(customer.getIdCustomer()));
         return new Respond("OK-" + token);
     }
 
     public Respond loginRestaurant(Login login){
         Restaurant restaurant = restaurantRepository.findByUsername(login.getUsername());
         if (restaurant == null) return new Respond("User not found");
-        String token = tokenService.createToken(restaurant.getId()).toString();
+        String token = String.valueOf(tokenService.createToken(restaurant.getIdRestaurant()));
         return new Respond("OK-" + token);
     }
 

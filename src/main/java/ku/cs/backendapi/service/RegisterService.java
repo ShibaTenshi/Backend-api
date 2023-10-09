@@ -22,18 +22,17 @@ public class RegisterService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public void isEmailAvailable(String email) throws MailAlreadyRegisterException {
-        if(repository.findByEmail(email) != null) {
-            throw new MailAlreadyRegisterException();
-        }
+    private boolean isEmailAvailable(String email) {
+        return repository.findByEmail(email) != null;
     }
 
-    public Respond createCustomer(Register customer){
-        try {
-            isEmailAvailable(customer.getEmail());
-        } catch (MailAlreadyRegisterException e) {
-            return new Respond("Mail already exited");
-        }
+    private boolean isUserNameAvailable(String userName) {
+        return repository.findByEmail(userName) != null;
+    }
+
+    public Respond createCustomer(Register customer) {
+        if (isEmailAvailable(customer.getEmail())) return new Respond("Email Exited");
+        if (isUserNameAvailable(customer.getUsername())) return new Respond("Username Exited");
 
         Customer record = modelMapper.map(customer, Customer.class);
 

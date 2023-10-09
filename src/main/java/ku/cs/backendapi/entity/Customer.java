@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Data
 @Entity
-public class Customer implements User{
+public class Customer{
 
     @Id
     @GeneratedValue
@@ -21,14 +21,9 @@ public class Customer implements User{
     @OneToMany(mappedBy = "customer")
     private List<Booking> bookingList;
 
-    private String customerImage;
+    private String imageLink;
     private String username;
     private String password;
     private String email;
     private String name;
-
-    @Override
-    public UUID getId() {
-        return idCustomer;
-    }
 }

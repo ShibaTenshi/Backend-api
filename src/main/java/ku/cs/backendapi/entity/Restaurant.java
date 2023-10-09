@@ -3,11 +3,12 @@ package ku.cs.backendapi.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.sql.Time;
 import java.util.UUID;
 
 @Data
 @Entity
-public class Restaurant implements User{
+public class Restaurant{
     @Id
     @GeneratedValue
     private UUID idRestaurant;
@@ -21,15 +22,15 @@ public class Restaurant implements User{
     @OneToOne
     private Booking booking;
 
-    private String restaurantImage;
+    private String imageLink;
     private String username;
     private String password;
     private String email;
     private String restaurantName;
     private String description;
-
-    @Override
-    public UUID getId() {
-        return idRestaurant;
-    }
+    private String menu;
+    private Time openTime;
+    private Time closeTime;
+    private String location;
+    private String mapLink;
 }
