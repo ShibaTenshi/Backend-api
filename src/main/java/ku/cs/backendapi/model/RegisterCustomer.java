@@ -3,7 +3,7 @@ package ku.cs.backendapi.model;
 import lombok.Data;
 
 @Data
-public class Register {
+public class RegisterCustomer {
     private String name;
 
     private String username;
