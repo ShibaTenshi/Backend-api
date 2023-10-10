@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Time;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -19,8 +20,8 @@ public class Restaurant implements User{
     @ManyToOne
     private Admin admin;
 
-    @OneToOne
-    private Booking booking;
+    @OneToMany
+    private List<Booking> bookingList;
 
     private String imageLink;
     private String username;
@@ -29,8 +30,9 @@ public class Restaurant implements User{
     private String restaurantName;
     private String description;
     private String menu;
-    private Time openTime;
-    private Time closeTime;
+    private String openTime;
+    private String closeTime;
     private String location;
     private String mapLink;
+    private String openDate;
 }

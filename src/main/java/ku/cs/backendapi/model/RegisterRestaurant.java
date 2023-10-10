@@ -19,14 +19,20 @@ public class RegisterRestaurant {
 
     private String description;
 
+    private String imageLink;
+
     private String location;
+
+    private String mapLink;
 
     private String menu;
 
-    private Time openTime;
+    private String openTime;
 
-    private Time closeTime;
+    private String closeTime;
 
-    private Category category;
+    private String openDate;
+
+    private String category;
 
 }

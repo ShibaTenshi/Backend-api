@@ -5,6 +5,7 @@ import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.model.RegisterCustomer;
 import ku.cs.backendapi.model.RegisterRestaurant;
 import ku.cs.backendapi.model.Respond;
+import ku.cs.backendapi.repository.CategoryRepository;
 import ku.cs.backendapi.repository.CustomerRepository;
 import ku.cs.backendapi.repository.RestaurantRepository;
 import org.modelmapper.ModelMapper;
@@ -22,24 +23,36 @@ public class RegisterService {
     private RestaurantRepository restaurantRepository;
 
     @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    private boolean isEmailAvailable(String email) {
+    private boolean isCustomerEmailAvailable(String email) {
         return customerRepository.findByEmail(email) != null;
     }
-
-    private boolean isUserNameAvailable(String userName) {
-        return customerRepository.findByEmail(userName) != null;
+    private boolean isRestaurantEmailAvailable(String email) {
+        return restaurantRepository.findByEmail(email) != null;
     }
 
-    private boolean isRestaurantNameAvailable(String restaurantName) {return restaurantRepository.findByRestaurantName(restaurantName) != null; }
+    private boolean isCustomerUserNameAvailable(String userName) {
+        return customerRepository.findByUsername(userName) != null;
+    }
+
+    private boolean isRestaurantUserNameAvailable(String userName) {
+        return restaurantRepository.findByUsername(userName) != null;
+    }
+
+    private boolean isRestaurantNameAvailable(String restaurantName) {
+        return restaurantRepository.findByRestaurantName(restaurantName) != null;
+    }
 
     public Respond createCustomer(RegisterCustomer customer) {
-        if (isEmailAvailable(customer.getEmail())) return new Respond("Email already used.");
-        if (isUserNameAvailable(customer.getUsername())) return new Respond("Username already used.");
+        if (isCustomerEmailAvailable(customer.getEmail())) return new Respond("Email already used.");
+        if (isCustomerUserNameAvailable(customer.getUsername())) return new Respond("Username already used.");
 
         Customer record = modelMapper.map(customer, Customer.class);
 
@@ -50,12 +63,14 @@ public class RegisterService {
         return new Respond("Customer Created");
     }
 
-    public Respond createRestaurant(RegisterRestaurant restaurant){
-        if (isEmailAvailable(restaurant.getEmail())) return new Respond("Email already used.");
-        if (isUserNameAvailable(restaurant.getUsername())) return new Respond("Username already used.");
-        if (isRestaurantNameAvailable(restaurant.getRestaurantName())) return new Respond("Restaurant's name already used.");
+    public Respond createRestaurant(RegisterRestaurant restaurant) {
+        if (isRestaurantEmailAvailable(restaurant.getEmail())) return new Respond("Email already used.");
+        if (isRestaurantUserNameAvailable(restaurant.getUsername())) return new Respond("Username already used.");
+        if (isRestaurantNameAvailable(restaurant.getRestaurantName()))
+            return new Respond("Restaurant's name already used.");
 
         Restaurant record = modelMapper.map(restaurant, Restaurant.class);
+        record.setCategory(categoryRepository.findByCategoryName(restaurant.getCategory()));
 
         String hashedPassword = passwordEncoder.encode(restaurant.getPassword());
         record.setPassword(hashedPassword);

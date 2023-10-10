@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface RestaurantRepository extends JpaRepository<Restaurant, UUID> {
     Restaurant findByRestaurantName(String restaurantName);
     Restaurant findByUsername(String userName);
+
+    Restaurant findByEmail(String email);
 }

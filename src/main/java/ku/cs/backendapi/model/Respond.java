@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class Respond {
-    private String status;
+    private String value;
 
-    public Respond(String status) {
-        this.status = status;
+    public Respond(String value) {
+        this.value = value;
     }
 }
