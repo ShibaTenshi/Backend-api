@@ -34,6 +34,7 @@ public class RegisterService {
     private boolean isCustomerEmailAvailable(String email) {
         return customerRepository.findByEmail(email) != null;
     }
+
     private boolean isRestaurantEmailAvailable(String email) {
         return restaurantRepository.findByEmail(email) != null;
     }
@@ -51,8 +52,8 @@ public class RegisterService {
     }
 
     public Respond createCustomer(RegisterCustomer customer) {
-        if (isCustomerEmailAvailable(customer.getEmail())) return new Respond("Email already used.");
-        if (isCustomerUserNameAvailable(customer.getUsername())) return new Respond("Username already used.");
+        if (isCustomerEmailAvailable(customer.getEmail())) return new Respond(404, "Email already used.");
+        if (isCustomerUserNameAvailable(customer.getUsername())) return new Respond(404, "Username already used.");
 
         Customer record = modelMapper.map(customer, Customer.class);
 
@@ -60,14 +61,14 @@ public class RegisterService {
         record.setPassword(hashedPassword);
 
         customerRepository.save(record);
-        return new Respond("Customer Created");
+        return new Respond(200, "Customer Created");
     }
 
     public Respond createRestaurant(RegisterRestaurant restaurant) {
-        if (isRestaurantEmailAvailable(restaurant.getEmail())) return new Respond("Email already used.");
-        if (isRestaurantUserNameAvailable(restaurant.getUsername())) return new Respond("Username already used.");
+        if (isRestaurantEmailAvailable(restaurant.getEmail())) return new Respond(404, "Email already used.");
+        if (isRestaurantUserNameAvailable(restaurant.getUsername())) return new Respond(404, "Username already used.");
         if (isRestaurantNameAvailable(restaurant.getRestaurantName()))
-            return new Respond("Restaurant's name already used.");
+            return new Respond(404, "Restaurant's name already used.");
 
         Restaurant record = modelMapper.map(restaurant, Restaurant.class);
         record.setCategory(categoryRepository.findByCategoryName(restaurant.getCategory()));
@@ -76,6 +77,6 @@ public class RegisterService {
         record.setPassword(hashedPassword);
 
         restaurantRepository.save(record);
-        return new Respond("Restaurant Created");
+        return new Respond(200, "Restaurant Created");
     }
 }

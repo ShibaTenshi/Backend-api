@@ -13,7 +13,7 @@ public class QueryService {
 
     public Respond getRestaurant(String name) {
         Restaurant restaurant = restaurantRepository.findByRestaurantName(name);
-        if(restaurant == null) return new Respond("Restaurant not found");
-        return new Respond(restaurantRepository.findByRestaurantName(name).toString());
+        if (restaurant == null) return new Respond(404, "Restaurant not found");
+        return new Respond(200, restaurantRepository.findByRestaurantName(name));
     }
 }

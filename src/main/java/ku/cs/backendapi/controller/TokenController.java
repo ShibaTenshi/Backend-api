@@ -16,13 +16,13 @@ public class TokenController {
     @Autowired
     private TokenService service;
 
-    @GetMapping("/{token}")
-    public Respond tokenValidate(@PathVariable String token){
+    @GetMapping
+    public Respond tokenValidate(@RequestParam String token){
         return service.validateToken(UUID.fromString(token));
     }
 
     @GetMapping("/all")
-    public String getAll() {
+    public Respond getAll() {
         return service.getTokenMap();
     }
 }

@@ -17,18 +17,18 @@ public class ContentService {
     public Respond getImageLinkCustomer(UUID tokenId) {
         try {
             Customer customer = tokenService.getCustomer(tokenId);
-            return new Respond("OK-" + customer.getImageLink());
+            return new Respond(200, customer.getImageLink());
         } catch (Exception e) {
-            return new Respond("Failed");
+            return new Respond(404);
         }
     }
 
     public Respond getImageLinkRestaurant(UUID tokenId) {
         try {
             Restaurant restaurant = tokenService.getRestaurant(tokenId);
-            return new Respond("OK-" + restaurant.getImageLink());
+            return new Respond(200, restaurant.getImageLink());
         } catch (Exception e) {
-            return new Respond("Failed");
+            return new Respond(404);
         }
     }
 }

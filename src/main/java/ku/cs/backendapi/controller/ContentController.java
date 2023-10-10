@@ -14,13 +14,13 @@ public class ContentController {
     @Autowired
     ContentService service;
 
-    @GetMapping("/customer/image/{tokenId}")
-    public Respond getCustomerImage(@PathVariable String tokenId) {
-        return service.getImageLinkCustomer(UUID.fromString(tokenId));
+    @GetMapping("/customer/image")
+    public Respond getCustomerImage(@RequestParam String token) {
+        return service.getImageLinkCustomer(UUID.fromString(token));
     }
 
-    @GetMapping("/restaurant/image/{tokenId}")
-    public Respond getRestaurantImage(@PathVariable String tokenId) {
-        return service.getImageLinkRestaurant(UUID.fromString(tokenId));
+    @GetMapping("/restaurant/image")
+    public Respond getRestaurantImage(@RequestParam String token) {
+        return service.getImageLinkRestaurant(UUID.fromString(token));
     }
 }

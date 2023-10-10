@@ -24,8 +24,8 @@ public class AuthController {
         return service.loginRestaurant(login);
     }
 
-    @PostMapping("/logout/{token}")
-    public void logout(@PathVariable String token) {
+    @PostMapping("/logout")
+    public void logout(@RequestParam String token) {
         service.removeToken(UUID.fromString(token));
     }
 }

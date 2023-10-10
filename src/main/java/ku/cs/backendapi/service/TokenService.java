@@ -32,9 +32,9 @@ public class TokenService {
 
     public Respond validateToken(UUID tokenId) {
         if (tokenList.isTokenContain(tokenId)) {
-            return new Respond("OK");
+            return new Respond(200);
         }
-        return new Respond("Failed");
+        return new Respond(404);
     }
 
     public Customer getCustomer(UUID tokenId) throws TokenNotfoundException, UserNotFoundException {
@@ -57,7 +57,7 @@ public class TokenService {
         tokenList.removeToken(tokenId);
     }
 
-    public String getTokenMap() {
-        return tokenList.getMap();
+    public Respond getTokenMap() {
+        return new Respond(200, tokenList.getMap());
     }
 }
