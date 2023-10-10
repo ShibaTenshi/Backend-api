@@ -8,10 +8,10 @@ import java.util.UUID;
 
 @Data
 @Entity
-public class Restaurant{
+public class Restaurant implements User{
     @Id
     @GeneratedValue
-    private UUID idRestaurant;
+    private UUID id;
 
     @ManyToOne
     private Category category;

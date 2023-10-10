@@ -12,11 +12,11 @@ import java.util.UUID;
 
 @Data
 @Entity
-public class Customer{
+public class Customer implements User{
 
     @Id
     @GeneratedValue
-    private UUID idCustomer;
+    private UUID id;
 
     @OneToMany(mappedBy = "customer")
     private List<Booking> bookingList;
