@@ -1,5 +1,6 @@
 package ku.cs.backendapi.service;
 
+import ku.cs.backendapi.common.RespondCode;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.model.Respond;
 import ku.cs.backendapi.repository.RestaurantRepository;
@@ -13,7 +14,7 @@ public class QueryService {
 
     public Respond getRestaurant(String name) {
         Restaurant restaurant = restaurantRepository.findByRestaurantName(name);
-        if (restaurant == null) return new Respond(404, "Restaurant not found");
-        return new Respond(200, restaurantRepository.findByRestaurantName(name));
+        if (restaurant == null) return new Respond(RespondCode.FAILED, "Restaurant not found");
+        return new Respond(RespondCode.OK, restaurantRepository.findByRestaurantName(name));
     }
 }

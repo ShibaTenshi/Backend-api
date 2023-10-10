@@ -1,5 +1,6 @@
 package ku.cs.backendapi.service;
 
+import ku.cs.backendapi.common.RespondCode;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.model.RegisterCustomer;
@@ -52,8 +53,8 @@ public class RegisterService {
     }
 
     public Respond createCustomer(RegisterCustomer customer) {
-        if (isCustomerEmailAvailable(customer.getEmail())) return new Respond(404, "Email already used.");
-        if (isCustomerUserNameAvailable(customer.getUsername())) return new Respond(404, "Username already used.");
+        if (isCustomerEmailAvailable(customer.getEmail())) return new Respond(RespondCode.FAILED, "Email already used.");
+        if (isCustomerUserNameAvailable(customer.getUsername())) return new Respond(RespondCode.FAILED, "Username already used.");
 
         Customer record = modelMapper.map(customer, Customer.class);
 
@@ -61,14 +62,14 @@ public class RegisterService {
         record.setPassword(hashedPassword);
 
         customerRepository.save(record);
-        return new Respond(200, "Customer Created");
+        return new Respond(RespondCode.OK, "Customer Created");
     }
 
     public Respond createRestaurant(RegisterRestaurant restaurant) {
-        if (isRestaurantEmailAvailable(restaurant.getEmail())) return new Respond(404, "Email already used.");
-        if (isRestaurantUserNameAvailable(restaurant.getUsername())) return new Respond(404, "Username already used.");
+        if (isRestaurantEmailAvailable(restaurant.getEmail())) return new Respond(RespondCode.FAILED, "Email already used.");
+        if (isRestaurantUserNameAvailable(restaurant.getUsername())) return new Respond(RespondCode.FAILED, "Username already used.");
         if (isRestaurantNameAvailable(restaurant.getRestaurantName()))
-            return new Respond(404, "Restaurant's name already used.");
+            return new Respond(RespondCode.FAILED, "Restaurant's name already used.");
 
         Restaurant record = modelMapper.map(restaurant, Restaurant.class);
         record.setCategory(categoryRepository.findByCategoryName(restaurant.getCategory()));
@@ -77,6 +78,6 @@ public class RegisterService {
         record.setPassword(hashedPassword);
 
         restaurantRepository.save(record);
-        return new Respond(200, "Restaurant Created");
+        return new Respond(RespondCode.OK, "Restaurant Created");
     }
 }

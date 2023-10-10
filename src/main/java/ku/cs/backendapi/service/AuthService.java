@@ -1,5 +1,6 @@
 package ku.cs.backendapi.service;
 
+import ku.cs.backendapi.common.RespondCode;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.entity.User;
@@ -27,13 +28,13 @@ public class AuthService {
     RestaurantRepository restaurantRepository;
 
     private Respond auth(User user, Login login) {
-        if (user == null || login.getUsername() == null) return new Respond(404, "User not found");
+        if (user == null || login.getUsername() == null) return new Respond(RespondCode.FAILED, "User not found");
 
         if (login.getPassword() == null || !passwordEncoder.matches(login.getPassword(), user.getPassword()))
-            return new Respond(404, "Password not correct");
+            return new Respond(RespondCode.FAILED, "Password not correct");
 
         String token = String.valueOf(tokenService.createToken(user.getId()));
-        return new Respond(200, token);
+        return new Respond(RespondCode.OK, token);
     }
 
     public Respond loginCustomer(Login login) {

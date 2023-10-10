@@ -13,7 +13,8 @@ public class TokenList {
         tokenMap = new HashMap<>();
     }
 
-    public void addToken(UUID tokenId, UUID userId) {
+    public UUID addToken(UUID userId) {
+        UUID tokenId = UUID.randomUUID();
         for(UUID keyUuid : tokenMap.keySet()) {
             if(tokenMap.get(keyUuid).equals(userId)) {
                 tokenMap.remove(keyUuid);
@@ -21,6 +22,7 @@ public class TokenList {
             }
         }
         tokenMap.put(tokenId, userId);
+        return tokenId;
     }
 
     public UUID getUserId(UUID tokenId) throws TokenNotfoundException {

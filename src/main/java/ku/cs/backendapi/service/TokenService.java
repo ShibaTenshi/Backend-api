@@ -1,5 +1,6 @@
 package ku.cs.backendapi.service;
 
+import ku.cs.backendapi.common.RespondCode;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exeption.TokenNotfoundException;
@@ -25,16 +26,14 @@ public class TokenService {
     private final TokenList tokenList = new TokenList();
 
     public UUID createToken(UUID userId) {
-        UUID tokenId = UUID.randomUUID();
-        tokenList.addToken(tokenId, userId);
-        return tokenId;
+        return tokenList.addToken(userId);
     }
 
     public Respond validateToken(UUID tokenId) {
         if (tokenList.isTokenContain(tokenId)) {
-            return new Respond(200);
+            return new Respond(RespondCode.OK);
         }
-        return new Respond(404);
+        return new Respond(RespondCode.FAILED);
     }
 
     public Customer getCustomer(UUID tokenId) throws TokenNotfoundException, UserNotFoundException {
@@ -58,6 +57,6 @@ public class TokenService {
     }
 
     public Respond getTokenMap() {
-        return new Respond(200, tokenList.getMap());
+        return new Respond(RespondCode.OK, tokenList.getMap());
     }
 }

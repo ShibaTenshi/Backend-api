@@ -1,5 +1,6 @@
 package ku.cs.backendapi.service;
 
+import ku.cs.backendapi.common.RespondCode;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.model.Respond;
@@ -17,18 +18,18 @@ public class ContentService {
     public Respond getImageLinkCustomer(UUID tokenId) {
         try {
             Customer customer = tokenService.getCustomer(tokenId);
-            return new Respond(200, customer.getImageLink());
+            return new Respond(RespondCode.OK, customer.getImageLink());
         } catch (Exception e) {
-            return new Respond(404);
+            return new Respond(RespondCode.FAILED);
         }
     }
 
     public Respond getImageLinkRestaurant(UUID tokenId) {
         try {
             Restaurant restaurant = tokenService.getRestaurant(tokenId);
-            return new Respond(200, restaurant.getImageLink());
+            return new Respond(RespondCode.OK, restaurant.getImageLink());
         } catch (Exception e) {
-            return new Respond(404);
+            return new Respond(RespondCode.FAILED);
         }
     }
 }

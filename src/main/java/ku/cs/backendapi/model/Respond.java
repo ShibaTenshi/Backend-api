@@ -1,17 +1,19 @@
 package ku.cs.backendapi.model;
 
+import ku.cs.backendapi.common.RespondCode;
 import lombok.Data;
 
 @Data
 public class Respond {
-    private int status;
+    private RespondCode status;
     private Object value;
 
-    public Respond(int status) {
+    public Respond(RespondCode status) {
         this.status = status;
+        value = "";
     }
 
-    public Respond(int status, Object value) {
+    public Respond(RespondCode status, Object value) {
         this.status = status;
         this.value = value;
     }

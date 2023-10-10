@@ -1,18 +1,30 @@
 package ku.cs.backendapi.controller;
 
 import ku.cs.backendapi.model.Respond;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import ku.cs.backendapi.service.OtpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/otp")
 @CrossOrigin(origins = "http://localhost:3000")
 public class OtpController {
 
-    @PostMapping("/{otp}")
-    public Respond verify() {
-        return null;
+    @Autowired
+    OtpService otpService;
+
+    @GetMapping
+    public Respond getNewOtp() {
+        return otpService.getNewOtp();
+    }
+
+    @PostMapping
+    public Respond validateOtp(@RequestParam String refer, String otpNumber) {
+        return otpService.otpValidate(refer, otpNumber);
+    }
+
+    @GetMapping("/all")
+    public Respond getAll() {
+        return otpService.getAllOtp();
     }
 }
