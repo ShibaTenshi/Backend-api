@@ -11,6 +11,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/token")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TokenController {
     @Autowired
     private TokenService service;
