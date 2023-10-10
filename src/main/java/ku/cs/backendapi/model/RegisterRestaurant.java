@@ -1,6 +1,9 @@
 package ku.cs.backendapi.model;
 
+import ku.cs.backendapi.entity.Category;
 import lombok.Data;
+
+import java.sql.Time;
 
 @Data
 public class RegisterRestaurant {
@@ -20,8 +23,10 @@ public class RegisterRestaurant {
 
     private String menu;
 
-    private String openTime;
+    private Time openTime;
 
-    private String closeTime;
+    private Time closeTime;
+
+    private Category category;
 
 }
