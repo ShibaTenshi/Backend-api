@@ -10,7 +10,7 @@
     </parent>
     <groupId>ku.cs</groupId>
     <artifactId>Backend-api</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>Backend-api</name>
     <description>Backend-api</description>
     <properties>
