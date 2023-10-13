@@ -3,6 +3,7 @@ package ku.cs.backendapi.service;
 import ku.cs.backendapi.common.RespondCode;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
+import ku.cs.backendapi.entity.User;
 import ku.cs.backendapi.model.RegisterCustomer;
 import ku.cs.backendapi.model.RegisterRestaurant;
 import ku.cs.backendapi.model.Respond;
@@ -31,6 +32,9 @@ public class RegisterService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private OTPService otpService;
 
     private boolean isCustomerEmailAvailable(String email) {
         return customerRepository.findByEmail(email) != null;
@@ -61,8 +65,10 @@ public class RegisterService {
         String hashedPassword = passwordEncoder.encode(customer.getPassword());
         record.setPassword(hashedPassword);
 
-        customerRepository.save(record);
-        return new Respond(RespondCode.OK, "Customer Created");
+        otpService.getNewOtp(record);
+
+        //customerRepository.save(record);
+        return new Respond(RespondCode.OK, "OTP Sent");
     }
 
     public Respond createRestaurant(RegisterRestaurant restaurant) {
@@ -77,7 +83,14 @@ public class RegisterService {
         String hashedPassword = passwordEncoder.encode(restaurant.getPassword());
         record.setPassword(hashedPassword);
 
-        restaurantRepository.save(record);
-        return new Respond(RespondCode.OK, "Restaurant Created");
+        otpService.getNewOtp(record);
+
+        //restaurantRepository.save(record);
+        return new Respond(RespondCode.OK, "OTP Sent");
+    }
+
+    private void addUser(User user) {
+        if(user instanceof Customer) customerRepository.save((Customer) user);
+        if(user instanceof Restaurant) restaurantRepository.save((Restaurant) user);
     }
 }

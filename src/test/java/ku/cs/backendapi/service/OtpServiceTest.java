@@ -6,7 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class OtpServiceTest {
-    @Autowired OtpService service;
+    @Autowired
+    OTPService service;
 
     @Test
     public void getApi() {

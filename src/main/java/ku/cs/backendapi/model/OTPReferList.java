@@ -1,57 +1,61 @@
 package ku.cs.backendapi.model;
 
 import ku.cs.backendapi.common.OTPVerify;
-import org.modelmapper.internal.bytebuddy.utility.RandomString;
+import ku.cs.backendapi.entity.User;
+import ku.cs.backendapi.exeption.UserNotFoundException;
 
 import java.time.LocalTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class OTPReferList {
-    private Map<String, OTP> otpMap;
+    private List<OTP> otpList;
+
+    private static int referCount = 1000;
 
     public OTPReferList() {
-        otpMap = new HashMap<>();
+        otpList = new ArrayList<>();
     }
 
-    private void clearExpired() {
-        for(OTP otp : otpMap.values()) {
-            if(otp.getExpire().isBefore(LocalTime.now())) {
-                otpMap.remove(otp.getRefer());
-            }
-        }
+    public void clearExpired() {
+        LocalTime now = LocalTime.now();
+        otpList.removeIf(otp -> otp.getExpire().isBefore(now));
     }
 
-    public OTP getNewOtp() {
+    public OTP getNewOtp(User user) {
         clearExpired();
 
-        String refer = RandomString.make();
-        while (otpMap.containsKey(refer)) refer = RandomString.make();
+        if (referCount >= 10000) referCount = 1000;
+        String refer = String.valueOf(referCount++);
 
         String otpNumber = String.valueOf(new Random().nextInt(100000, 999999));
 
-        OTP otp = new OTP(refer, LocalTime.now().plusMinutes(10), otpNumber);
+        OTP otp = new OTP(refer, LocalTime.now().plusMinutes(10), otpNumber, user);
 
-        otpMap.put(refer, otp);
+        otpList.add(otp);
         return otp;
     }
 
     public OTPVerify otpValidate(String otpRefer, String requestOtp) {
-        if (!otpMap.containsKey(otpRefer)) return OTPVerify.EXPIRED;
-        OTP otp = otpMap.get(otpRefer);
-        if (otp.getExpire().isBefore(LocalTime.now())) {
-            otpMap.remove(otpRefer);
-            return OTPVerify.EXPIRED;
+        Optional<OTP> optionalOTP = otpList.stream().filter(otp -> otp.getRefer().equals(otpRefer)).findFirst();
+        if (optionalOTP.isPresent()) {
+            if (optionalOTP.get().getOtp().equals(requestOtp)) {
+                return OTPVerify.CORRECT;
+            }
+            return OTPVerify.INCORRECT;
         }
-        if (otp.getOtp().equals(requestOtp)) {
-            otpMap.remove(otpRefer);
-            return OTPVerify.CORRECT;
-        }
-        return OTPVerify.INCORRECT;
+        return OTPVerify.EXPIRED;
     }
 
     public OTP[] getAllOtp() {
-        return otpMap.values().toArray(new OTP[0]);
+        return otpList.toArray(new OTP[0]);
+    }
+
+    public User getUser(String refer) throws UserNotFoundException {
+        Optional<OTP> optionalOTP = otpList.stream().filter(otp -> otp.getRefer().equals(refer)).findFirst();
+        if(optionalOTP.isPresent()) {
+            otpList.remove(optionalOTP.get());
+            return optionalOTP.get().getUser();
+        }
+        throw new UserNotFoundException();
     }
 }

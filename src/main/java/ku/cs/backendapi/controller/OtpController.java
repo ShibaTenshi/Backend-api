@@ -1,7 +1,7 @@
 package ku.cs.backendapi.controller;
 
 import ku.cs.backendapi.model.Respond;
-import ku.cs.backendapi.service.OtpService;
+import ku.cs.backendapi.service.OTPService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 public class OtpController {
 
     @Autowired
-    OtpService otpService;
+    OTPService otpService;
 
     @GetMapping
-    public Respond getNewOtp() {
-        return otpService.getNewOtp();
+    public Respond getNewOtp(@RequestParam String oldRefer) {
+        return otpService.requestNewOtp(oldRefer);
     }
 
     @PostMapping
@@ -26,5 +26,10 @@ public class OtpController {
     @GetMapping("/all")
     public Respond getAll() {
         return otpService.getAllOtp();
+    }
+
+    @PostMapping("/clear")
+    public Respond clearExpired() {
+        return otpService.clearExpired();
     }
 }

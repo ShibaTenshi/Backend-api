@@ -6,16 +6,14 @@ import lombok.Data;
 import java.time.LocalTime;
 
 @Data
-public class OTP {
+public class OTPRespond {
     private String refer;
     private LocalTime expire;
     private String otp;
-    private User user;
 
-    public OTP(String refer, LocalTime expire, String otp, User user) {
+    public OTPRespond(String refer, LocalTime expire, String otp) {
         this.refer = refer;
         this.expire = expire;
         this.otp = otp;
-        this.user = user;
     }
 }
