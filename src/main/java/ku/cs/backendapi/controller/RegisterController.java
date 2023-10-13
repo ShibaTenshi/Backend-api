@@ -12,17 +12,18 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/register")
 public class RegisterController {
 
     @Autowired
     private RegisterService service;
 
-    @PostMapping("/register/customer")
+    @PostMapping("/customer")
     public String registerCustomer(@RequestBody RegisterCustomer customer) throws MailAlreadyRegisterException, UsernameAlreadyRegisterException, MailFormatException {
         return service.createCustomer(customer);
     }
 
-    @PostMapping("/register/restaurant")
+    @PostMapping("/restaurant")
     public String registerRestaurant(@RequestBody RegisterRestaurant restaurant) throws MailAlreadyRegisterException, UsernameAlreadyRegisterException, RestaurantNameAlreadyRegisterException, MailFormatException {
         return service.createRestaurant(restaurant);
     }

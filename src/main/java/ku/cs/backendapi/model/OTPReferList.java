@@ -25,7 +25,7 @@ public class OTPReferList {
     public OTP getNewOtp(User user) {
         clearExpired();
 
-        if (referCount >= 10000) referCount = 1000;
+        if (referCount >= 100000) referCount = 1000;
         String refer = String.valueOf(referCount++);
 
         String otpNumber = String.valueOf(new Random().nextInt(100000, 999999));

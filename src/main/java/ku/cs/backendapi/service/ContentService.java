@@ -1,7 +1,6 @@
 package ku.cs.backendapi.service;
 
 import ku.cs.backendapi.entity.Customer;
-import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exeption.TokenNotfoundException;
 import ku.cs.backendapi.exeption.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

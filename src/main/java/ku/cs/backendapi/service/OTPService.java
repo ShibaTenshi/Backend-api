@@ -38,14 +38,14 @@ public class OTPService {
 
     public String getNewOtpRegister(User user) {
         OTP otp = otpReferList.getNewOtp(user);
-        postMethod("http://localhost:5042/sendotp", new MailBody(user.getEmail(), user.getUsername(), otp.getOtp()));
+        postMethod("http://10.147.17.253:5042/sendotp", new MailBody(user.getEmail(), user.getUsername(), otp.getOtp()));
         return otp.getRefer();
     }
 
     public String requestNewOtp(String oldRefer) throws UserNotFoundException {
         User user = otpReferList.getUser(oldRefer);
         OTP otp = otpReferList.getNewOtp(user);
-        postMethod("http://localhost:5042/sendotp", new MailBody(user.getEmail(), user.getUsername(), otp.getOtp()));
+        postMethod("http://10.147.17.253:5042/sendotp", new MailBody(user.getEmail(), user.getUsername(), otp.getOtp()));
         return otp.getRefer();
     }
 

@@ -58,10 +58,14 @@ public class RegisterService {
         return restaurantRepository.findByRestaurantName(restaurantName) != null;
     }
 
+    private boolean checkMailFormat(String mail) {
+        return mail.endsWith("gmail.com") || mail.endsWith("ku.th");
+    }
+
     public String createCustomer(RegisterCustomer customer) throws MailAlreadyRegisterException, UsernameAlreadyRegisterException, MailFormatException {
         if (isCustomerEmailAvailable(customer.getEmail())) throw new MailAlreadyRegisterException();
         if (isCustomerUserNameAvailable(customer.getUsername())) throw new UsernameAlreadyRegisterException();
-        if(!customer.getEmail().matches("gmail | hotmail | ku.th")) throw new MailFormatException();
+        if (!checkMailFormat(customer.getEmail())) throw new MailFormatException();
 
         Customer record = modelMapper.map(customer, Customer.class);
 
@@ -74,9 +78,9 @@ public class RegisterService {
     public String createRestaurant(RegisterRestaurant restaurant) throws MailAlreadyRegisterException, UsernameAlreadyRegisterException, RestaurantNameAlreadyRegisterException, MailFormatException {
         if (isRestaurantEmailAvailable(restaurant.getEmail())) throw new MailAlreadyRegisterException();
         if (isRestaurantUserNameAvailable(restaurant.getUsername())) throw new UsernameAlreadyRegisterException();
-        if(isRestaurantNameAvailable(restaurant.getName())) throw new RestaurantNameAlreadyRegisterException();
+        if (isRestaurantNameAvailable(restaurant.getName())) throw new RestaurantNameAlreadyRegisterException();
+        if (!checkMailFormat(restaurant.getEmail())) throw new MailFormatException();
 
-        if(!restaurant.getEmail().matches("gmail | hotmail | ku.th")) throw new MailFormatException();
         Restaurant record = modelMapper.map(restaurant, Restaurant.class);
 
         String hashedPassword = passwordEncoder.encode(restaurant.getPassword());
