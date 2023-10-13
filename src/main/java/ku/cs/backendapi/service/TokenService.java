@@ -2,6 +2,7 @@ package ku.cs.backendapi.service;
 
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
+import ku.cs.backendapi.entity.User;
 import ku.cs.backendapi.exeption.TokenNotfoundException;
 import ku.cs.backendapi.exeption.UserNotFoundException;
 import ku.cs.backendapi.model.TokenList;
@@ -34,17 +35,13 @@ public class TokenService {
         throw new TokenNotfoundException();
     }
 
-    public Customer getCustomer(UUID tokenId) throws TokenNotfoundException, UserNotFoundException {
+    public User getUser(UUID tokenId) throws TokenNotfoundException, UserNotFoundException {
         Optional<Customer> customer = customerRepository.findById(tokenList.getUserId(tokenId));
-        if (customer.isPresent()) {
+        Optional<Restaurant> restaurant = restaurantRepository.findById(tokenList.getUserId(tokenId));
+        if(customer.isPresent()) {
             return customer.get();
         }
-        throw new UserNotFoundException();
-    }
-
-    public Restaurant getRestaurant(UUID tokenId) throws TokenNotfoundException, UserNotFoundException {
-        Optional<Restaurant> restaurant = restaurantRepository.findById(tokenList.getUserId(tokenId));
-        if (restaurant.isPresent()) {
+        if(restaurant.isPresent()) {
             return restaurant.get();
         }
         throw new UserNotFoundException();

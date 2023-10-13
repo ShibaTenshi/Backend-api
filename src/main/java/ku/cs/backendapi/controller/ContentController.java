@@ -15,8 +15,8 @@ public class ContentController {
     @Autowired
     ContentService service;
 
-    @GetMapping("/customer/image")
-    public String getCustomerImage(@RequestParam String token) throws UserNotFoundException, TokenNotfoundException {
+    @GetMapping("/image")
+    public String getUserImage(@RequestParam String token) throws UserNotFoundException, TokenNotfoundException {
         return service.getImageLinkCustomer(UUID.fromString(token));
     }
 }

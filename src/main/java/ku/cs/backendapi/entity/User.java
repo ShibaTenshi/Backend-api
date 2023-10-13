@@ -7,4 +7,5 @@ public interface User {
     String getPassword();
     UUID getId();
     String getEmail();
+    String getImageLink();
 }
