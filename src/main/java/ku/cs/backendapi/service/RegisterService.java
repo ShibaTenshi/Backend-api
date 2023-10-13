@@ -2,11 +2,10 @@ package ku.cs.backendapi.service;
 
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
-import ku.cs.backendapi.entity.User;
-import ku.cs.backendapi.exeption.MailAlreadyRegisterException;
-import ku.cs.backendapi.exeption.MailFormatException;
-import ku.cs.backendapi.exeption.RestaurantNameAlreadyRegisterException;
-import ku.cs.backendapi.exeption.UsernameAlreadyRegisterException;
+import ku.cs.backendapi.exception.MailAlreadyRegisterException;
+import ku.cs.backendapi.exception.MailFormatException;
+import ku.cs.backendapi.exception.RestaurantNameAlreadyRegisterException;
+import ku.cs.backendapi.exception.UsernameAlreadyRegisterException;
 import ku.cs.backendapi.model.RegisterCustomer;
 import ku.cs.backendapi.model.RegisterRestaurant;
 import ku.cs.backendapi.repository.CategoryRepository;

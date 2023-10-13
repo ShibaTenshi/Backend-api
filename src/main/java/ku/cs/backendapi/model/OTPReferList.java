@@ -1,9 +1,9 @@
 package ku.cs.backendapi.model;
 
 import ku.cs.backendapi.entity.User;
-import ku.cs.backendapi.exeption.OTPExpiredException;
-import ku.cs.backendapi.exeption.OTPIncorrectException;
-import ku.cs.backendapi.exeption.UserNotFoundException;
+import ku.cs.backendapi.exception.OTPExpiredException;
+import ku.cs.backendapi.exception.OTPIncorrectException;
+import ku.cs.backendapi.exception.UserNotFoundException;
 
 import java.time.LocalTime;
 import java.util.*;

@@ -1,6 +1,6 @@
 package ku.cs.backendapi.model;
 
-import ku.cs.backendapi.exeption.TokenNotfoundException;
+import ku.cs.backendapi.exception.TokenNotfoundException;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package ku.cs.backendapi.controller;
 
-import ku.cs.backendapi.exeption.TokenNotfoundException;
-import ku.cs.backendapi.exeption.UserNotFoundException;
+import ku.cs.backendapi.exception.TokenNotfoundException;
+import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

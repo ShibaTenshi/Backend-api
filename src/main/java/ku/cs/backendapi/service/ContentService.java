@@ -1,9 +1,8 @@
 package ku.cs.backendapi.service;
 
-import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.User;
-import ku.cs.backendapi.exeption.TokenNotfoundException;
-import ku.cs.backendapi.exeption.UserNotFoundException;
+import ku.cs.backendapi.exception.TokenNotfoundException;
+import ku.cs.backendapi.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

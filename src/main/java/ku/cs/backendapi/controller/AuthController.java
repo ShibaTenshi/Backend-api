@@ -1,7 +1,7 @@
 package ku.cs.backendapi.controller;
 
-import ku.cs.backendapi.exeption.PasswordNotCorrectException;
-import ku.cs.backendapi.exeption.UserNotFoundException;
+import ku.cs.backendapi.exception.PasswordNotCorrectException;
+import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.Login;
 import ku.cs.backendapi.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;

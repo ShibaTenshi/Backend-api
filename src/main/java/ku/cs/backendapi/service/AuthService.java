@@ -1,8 +1,8 @@
 package ku.cs.backendapi.service;
 
 import ku.cs.backendapi.entity.User;
-import ku.cs.backendapi.exeption.PasswordNotCorrectException;
-import ku.cs.backendapi.exeption.UserNotFoundException;
+import ku.cs.backendapi.exception.PasswordNotCorrectException;
+import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.Login;
 import ku.cs.backendapi.repository.CustomerRepository;
 import ku.cs.backendapi.repository.RestaurantRepository;

@@ -1,6 +1,6 @@
 package ku.cs.backendapi.controller;
 
-import ku.cs.backendapi.exeption.TokenNotfoundException;
+import ku.cs.backendapi.exception.TokenNotfoundException;
 import ku.cs.backendapi.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

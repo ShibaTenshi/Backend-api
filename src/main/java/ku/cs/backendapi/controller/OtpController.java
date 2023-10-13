@@ -1,8 +1,8 @@
 package ku.cs.backendapi.controller;
 
-import ku.cs.backendapi.exeption.OTPExpiredException;
-import ku.cs.backendapi.exeption.OTPIncorrectException;
-import ku.cs.backendapi.exeption.UserNotFoundException;
+import ku.cs.backendapi.exception.OTPExpiredException;
+import ku.cs.backendapi.exception.OTPIncorrectException;
+import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.OTP;
 import ku.cs.backendapi.service.OTPService;
 import org.springframework.beans.factory.annotation.Autowired;

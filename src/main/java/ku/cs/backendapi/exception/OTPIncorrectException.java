@@ -1,4 +1,4 @@
-package ku.cs.backendapi.exeption;
+package ku.cs.backendapi.exception;
 
 public class OTPIncorrectException extends Exception{
     public OTPIncorrectException() {
