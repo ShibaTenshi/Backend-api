@@ -1,12 +1,14 @@
 package ku.cs.backendapi.service;
 
-import ku.cs.backendapi.common.RespondCode;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.entity.User;
+import ku.cs.backendapi.exeption.MailAlreadyRegisterException;
+import ku.cs.backendapi.exeption.MailFormatException;
+import ku.cs.backendapi.exeption.RestaurantNameAlreadyRegisterException;
+import ku.cs.backendapi.exeption.UsernameAlreadyRegisterException;
 import ku.cs.backendapi.model.RegisterCustomer;
 import ku.cs.backendapi.model.RegisterRestaurant;
-import ku.cs.backendapi.model.Respond;
 import ku.cs.backendapi.repository.CategoryRepository;
 import ku.cs.backendapi.repository.CustomerRepository;
 import ku.cs.backendapi.repository.RestaurantRepository;
@@ -56,41 +58,30 @@ public class RegisterService {
         return restaurantRepository.findByRestaurantName(restaurantName) != null;
     }
 
-    public Respond createCustomer(RegisterCustomer customer) {
-        if (isCustomerEmailAvailable(customer.getEmail())) return new Respond(RespondCode.FAILED, "Email already used.");
-        if (isCustomerUserNameAvailable(customer.getUsername())) return new Respond(RespondCode.FAILED, "Username already used.");
+    public String createCustomer(RegisterCustomer customer) throws MailAlreadyRegisterException, UsernameAlreadyRegisterException, MailFormatException {
+        if (isCustomerEmailAvailable(customer.getEmail())) throw new MailAlreadyRegisterException();
+        if (isCustomerUserNameAvailable(customer.getUsername())) throw new UsernameAlreadyRegisterException();
+        if(!customer.getEmail().matches("gmail | hotmail | ku.th")) throw new MailFormatException();
 
         Customer record = modelMapper.map(customer, Customer.class);
 
         String hashedPassword = passwordEncoder.encode(customer.getPassword());
         record.setPassword(hashedPassword);
 
-        otpService.getNewOtp(record);
-
-        //customerRepository.save(record);
-        return new Respond(RespondCode.OK, "OTP Sent");
+        return otpService.getNewOtpRegister(record);
     }
 
-    public Respond createRestaurant(RegisterRestaurant restaurant) {
-        if (isRestaurantEmailAvailable(restaurant.getEmail())) return new Respond(RespondCode.FAILED, "Email already used.");
-        if (isRestaurantUserNameAvailable(restaurant.getUsername())) return new Respond(RespondCode.FAILED, "Username already used.");
-        if (isRestaurantNameAvailable(restaurant.getRestaurantName()))
-            return new Respond(RespondCode.FAILED, "Restaurant's name already used.");
+    public String createRestaurant(RegisterRestaurant restaurant) throws MailAlreadyRegisterException, UsernameAlreadyRegisterException, RestaurantNameAlreadyRegisterException, MailFormatException {
+        if (isRestaurantEmailAvailable(restaurant.getEmail())) throw new MailAlreadyRegisterException();
+        if (isRestaurantUserNameAvailable(restaurant.getUsername())) throw new UsernameAlreadyRegisterException();
+        if(isRestaurantNameAvailable(restaurant.getName())) throw new RestaurantNameAlreadyRegisterException();
 
+        if(!restaurant.getEmail().matches("gmail | hotmail | ku.th")) throw new MailFormatException();
         Restaurant record = modelMapper.map(restaurant, Restaurant.class);
-        record.setCategory(categoryRepository.findByCategoryName(restaurant.getCategory()));
 
         String hashedPassword = passwordEncoder.encode(restaurant.getPassword());
         record.setPassword(hashedPassword);
 
-        otpService.getNewOtp(record);
-
-        //restaurantRepository.save(record);
-        return new Respond(RespondCode.OK, "OTP Sent");
-    }
-
-    private void addUser(User user) {
-        if(user instanceof Customer) customerRepository.save((Customer) user);
-        if(user instanceof Restaurant) restaurantRepository.save((Restaurant) user);
+        return otpService.getNewOtpRegister(record);
     }
 }

@@ -1,12 +1,9 @@
 package ku.cs.backendapi.service;
 
-import ku.cs.backendapi.common.RespondCode;
-import ku.cs.backendapi.entity.Customer;
-import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.entity.User;
+import ku.cs.backendapi.exeption.PasswordNotCorrectException;
 import ku.cs.backendapi.exeption.UserNotFoundException;
 import ku.cs.backendapi.model.Login;
-import ku.cs.backendapi.model.Respond;
 import ku.cs.backendapi.repository.CustomerRepository;
 import ku.cs.backendapi.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,27 +24,26 @@ public class AuthService {
     @Autowired
     RestaurantRepository restaurantRepository;
 
-    private Respond auth(User user, Login login) {
-        if (user == null || login.getUsername() == null) return new Respond(RespondCode.FAILED, "User not found");
+    private String auth(User user, Login login) throws UserNotFoundException, PasswordNotCorrectException {
+        if (user == null || login.getUsername() == null) throw new UserNotFoundException();
 
         if (login.getPassword() == null || !passwordEncoder.matches(login.getPassword(), user.getPassword()))
-            return new Respond(RespondCode.FAILED, "Password not correct");
+            throw new PasswordNotCorrectException();
 
-        String token = String.valueOf(tokenService.createToken(user.getId()));
-        return new Respond(RespondCode.OK, token);
+        return String.valueOf(tokenService.createToken(user.getId()));
     }
 
-    public Respond loginCustomer(Login login) {
+    public String loginCustomer(Login login) throws UserNotFoundException, PasswordNotCorrectException {
         User customer = customerRepository.findByUsername(login.getUsername());
         return auth(customer, login);
     }
 
-    public Respond loginRestaurant(Login login) {
+    public String loginRestaurant(Login login) throws UserNotFoundException, PasswordNotCorrectException {
         User restaurant = restaurantRepository.findByUsername(login.getUsername());
         return auth(restaurant, login);
     }
 
-    public void removeToken(UUID tokenID) {
-        tokenService.removeToken(tokenID);
+    public void removeToken(UUID tokenId) {
+        tokenService.removeToken(tokenId);
     }
 }
