@@ -25,6 +25,7 @@ public class Booking {
     @OneToOne
     private TableType idTableType;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
 }
