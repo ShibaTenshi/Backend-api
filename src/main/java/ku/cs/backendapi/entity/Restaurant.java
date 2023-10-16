@@ -29,7 +29,7 @@ public class Restaurant implements User{
     private String email;
     private String restaurantName;
     private String description;
-    private String menu;
+    private String menuLink;
     private String openTime;
     private String closeTime;
     private String location;

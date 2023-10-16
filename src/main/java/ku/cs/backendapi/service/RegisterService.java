@@ -77,7 +77,7 @@ public class RegisterService {
     public String createRestaurant(RegisterRestaurant restaurant) throws MailAlreadyRegisterException, UsernameAlreadyRegisterException, RestaurantNameAlreadyRegisterException, MailFormatException {
         if (isRestaurantEmailAvailable(restaurant.getEmail())) throw new MailAlreadyRegisterException();
         if (isRestaurantUserNameAvailable(restaurant.getUsername())) throw new UsernameAlreadyRegisterException();
-        if (isRestaurantNameAvailable(restaurant.getName())) throw new RestaurantNameAlreadyRegisterException();
+        if (isRestaurantNameAvailable(restaurant.getRestaurantName())) throw new RestaurantNameAlreadyRegisterException();
         if (!checkMailFormat(restaurant.getEmail())) throw new MailFormatException();
 
         Restaurant record = modelMapper.map(restaurant, Restaurant.class);
