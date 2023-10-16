@@ -8,7 +8,6 @@ public class RegisterRestaurant {
     private String imageLink;
     private String ownerName;
     private String username;
-    private String password;
     private String email;
     private String restaurantName;
     private String description;

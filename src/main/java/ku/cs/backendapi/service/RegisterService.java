@@ -1,5 +1,6 @@
 package ku.cs.backendapi.service;
 
+import ku.cs.backendapi.common.RestaurantStatus;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exception.MailAlreadyRegisterException;
@@ -81,9 +82,8 @@ public class RegisterService {
         if (!checkMailFormat(restaurant.getEmail())) throw new MailFormatException();
 
         Restaurant record = modelMapper.map(restaurant, Restaurant.class);
-
-        String hashedPassword = passwordEncoder.encode(restaurant.getPassword());
-        record.setPassword(hashedPassword);
+        record.setStatus(RestaurantStatus.UNAPPROVED);
+        record.setCategory(categoryRepository.findByCategoryName(restaurant.getCategory()));
 
         return otpService.getNewOtpRegister(record);
     }
