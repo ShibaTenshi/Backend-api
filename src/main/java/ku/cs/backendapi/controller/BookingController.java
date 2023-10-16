@@ -13,16 +13,13 @@ import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/restaurant/{restaurantId}")
+@RequestMapping("/booking")
 public class BookingController {
     @Autowired
     private BookingService bookingService;
 
-    @PostMapping("/booking")
-    public void booking(@RequestParam String token,
-                        @PathVariable UUID restaurantId,
-                        BookingRequest bookingRequest)
-            throws UserNotFoundException, TokenNotfoundException, RestaurantNotFoundException, TableTypeNotFoundException {
-        bookingService.booking(UUID.fromString(token), restaurantId, bookingRequest);
+    @PostMapping()
+    public void booking(@RequestBody BookingRequest request) throws UserNotFoundException, TokenNotfoundException, RestaurantNotFoundException, TableTypeNotFoundException {
+        bookingService.booking(request);
     }
 }

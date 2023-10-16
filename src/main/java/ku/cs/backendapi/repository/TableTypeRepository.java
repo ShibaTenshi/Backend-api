@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface TableTypeRepository extends JpaRepository<TableType, UUID> {
+    TableType findBySeatNumber(int seatNumber);
 }

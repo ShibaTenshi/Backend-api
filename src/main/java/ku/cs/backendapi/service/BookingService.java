@@ -17,7 +17,9 @@ import ku.cs.backendapi.repository.TableTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,28 +40,25 @@ public class BookingService {
     @Autowired
     BookingRepository bookingRepository;
 
-    public void booking(UUID tokenId, UUID restaurantId, BookingRequest bookingRequest)
+    public void booking(BookingRequest bookingRequest)
             throws UserNotFoundException,
             TokenNotfoundException,
             RestaurantNotFoundException,
             TableTypeNotFoundException {
 
-        Customer customer = (Customer) tokenService.getUser(tokenId);
-
-        Optional<Restaurant> restaurantOptional = restaurantRepository.findById(restaurantId);
-        if (restaurantOptional.isEmpty()) {
+        Customer customer = (Customer) tokenService.getUser(UUID.fromString(bookingRequest.getTokenId()));
+        Restaurant restaurant = restaurantRepository.findByRestaurantName(bookingRequest.getRestaurantName());
+        if (restaurant == null) {
             throw new RestaurantNotFoundException();
         }
-        Restaurant restaurant = restaurantOptional.get();
 
-        Optional<TableType> tableTypeOptional = tableTypeRepository.findById(bookingRequest.getIdTableType());
-        if (tableTypeOptional.isEmpty()) {
+        TableType tableType = tableTypeRepository.findBySeatNumber(bookingRequest.getSeatNumber());
+        if (tableType == null) {
             throw new TableTypeNotFoundException();
         }
-        TableType tableType = tableTypeOptional.get();
 
         Booking booking = new Booking();
-        booking.setDateTime(LocalDateTime.now());
+        booking.setDateTime(LocalDateTime.parse(bookingRequest.getDateTime(), DateTimeFormatter.ISO_DATE_TIME));
         booking.setCustomer(customer);
         booking.setIdRestaurant(restaurant);
         booking.setIdTableType(tableType);
