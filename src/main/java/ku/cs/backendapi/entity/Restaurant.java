@@ -1,6 +1,7 @@
 package ku.cs.backendapi.entity;
 
 import jakarta.persistence.*;
+import ku.cs.backendapi.common.RestaurantStatus;
 import lombok.Data;
 
 import java.sql.Time;
@@ -24,6 +25,7 @@ public class Restaurant implements User{
     private List<Booking> bookingList;
 
     private String imageLink;
+    private String ownerName;
     private String username;
     private String password;
     private String email;
@@ -35,4 +37,7 @@ public class Restaurant implements User{
     private String location;
     private String mapLink;
     private String openDate;
+
+    @Enumerated(EnumType.STRING)
+    private RestaurantStatus status;
 }
