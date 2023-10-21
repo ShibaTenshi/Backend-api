@@ -24,4 +24,13 @@ public class Admin{
     private List<Restaurant> restaurant;
 
     private String password;
+
+    public Admin(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public Admin() {
+
+    }
 }

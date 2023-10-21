@@ -1,6 +1,7 @@
 package ku.cs.backendapi.service;
 
 import ku.cs.backendapi.common.RestaurantStatus;
+import ku.cs.backendapi.entity.Admin;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exception.MailAlreadyRegisterException;
@@ -9,6 +10,7 @@ import ku.cs.backendapi.exception.RestaurantNameAlreadyRegisterException;
 import ku.cs.backendapi.exception.UsernameAlreadyRegisterException;
 import ku.cs.backendapi.model.RegisterCustomer;
 import ku.cs.backendapi.model.RegisterRestaurant;
+import ku.cs.backendapi.repository.AdminRepository;
 import ku.cs.backendapi.repository.CategoryRepository;
 import ku.cs.backendapi.repository.CustomerRepository;
 import ku.cs.backendapi.repository.RestaurantRepository;
@@ -28,6 +30,9 @@ public class RegisterService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -86,5 +91,10 @@ public class RegisterService {
         record.setCategory(categoryRepository.findByCategoryName(restaurant.getCategory()));
 
         return otpService.getNewOtpRegister(record);
+    }
+
+    public void addAdmin() {
+        Admin admin = new Admin("admin", passwordEncoder.encode("admin"));
+        adminRepository.save(admin);
     }
 }
