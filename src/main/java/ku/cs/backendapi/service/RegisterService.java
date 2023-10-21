@@ -94,7 +94,9 @@ public class RegisterService {
     }
 
     public void addAdmin() {
-        Admin admin = new Admin("admin", passwordEncoder.encode("admin"));
-        adminRepository.save(admin);
+        Admin admin = adminRepository.findByUsername("admin");
+        if(admin == null) {
+            adminRepository.save(new Admin("admin", passwordEncoder.encode("admin")));
+        }
     }
 }
