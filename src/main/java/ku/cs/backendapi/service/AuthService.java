@@ -1,9 +1,11 @@
 package ku.cs.backendapi.service;
 
+import ku.cs.backendapi.entity.Admin;
 import ku.cs.backendapi.entity.User;
 import ku.cs.backendapi.exception.PasswordNotCorrectException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.Login;
+import ku.cs.backendapi.repository.AdminRepository;
 import ku.cs.backendapi.repository.CustomerRepository;
 import ku.cs.backendapi.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class AuthService {
     CustomerRepository customerRepository;
     @Autowired
     RestaurantRepository restaurantRepository;
+    @Autowired
+    AdminRepository adminRepository;
 
     private String auth(User user, Login login) throws UserNotFoundException, PasswordNotCorrectException {
         if (user == null || login.getUsername() == null) throw new UserNotFoundException();
@@ -41,6 +45,16 @@ public class AuthService {
     public String loginRestaurant(Login login) throws UserNotFoundException, PasswordNotCorrectException {
         User restaurant = restaurantRepository.findByUsername(login.getUsername());
         return auth(restaurant, login);
+    }
+
+    public String loginAdmin(Login login) throws UserNotFoundException, PasswordNotCorrectException {
+        Admin admin = adminRepository.findByUsername(login.getUsername());
+        if (admin == null || login.getUsername() == null) throw new UserNotFoundException();
+
+        if (login.getPassword() == null || !passwordEncoder.matches(login.getPassword(), admin.getPassword()))
+            throw new PasswordNotCorrectException();
+
+        return String.valueOf(tokenService.createToken(admin.getId()));
     }
 
     public void removeToken(UUID tokenId) {

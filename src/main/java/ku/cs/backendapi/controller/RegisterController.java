@@ -9,6 +9,7 @@ import ku.cs.backendapi.model.RegisterRestaurant;
 import ku.cs.backendapi.service.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -24,7 +25,7 @@ public class RegisterController {
     }
 
     @PostMapping("/restaurant")
-    public String registerRestaurant(@RequestBody RegisterRestaurant restaurant) throws MailAlreadyRegisterException, UsernameAlreadyRegisterException, RestaurantNameAlreadyRegisterException, MailFormatException {
+    public String registerRestaurant(@RequestBody RegisterRestaurant restaurant, @RequestPart MultipartFile file) throws MailAlreadyRegisterException, UsernameAlreadyRegisterException, RestaurantNameAlreadyRegisterException, MailFormatException {
         return service.createRestaurant(restaurant);
     }
 }

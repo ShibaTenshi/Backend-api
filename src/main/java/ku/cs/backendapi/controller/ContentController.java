@@ -1,6 +1,5 @@
 package ku.cs.backendapi.controller;
 
-import ku.cs.backendapi.entity.Category;
 import ku.cs.backendapi.exception.TokenNotfoundException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.service.ContentService;

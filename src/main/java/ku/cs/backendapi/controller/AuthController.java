@@ -26,6 +26,11 @@ public class AuthController {
         return service.loginRestaurant(login);
     }
 
+    @PostMapping("/login/admin")
+    public String loginAdmin(@RequestBody Login login) throws UserNotFoundException, PasswordNotCorrectException {
+        return service.loginAdmin(login);
+    }
+
     @PostMapping("/logout")
     public void logout(@RequestParam String token) {
         service.removeToken(UUID.fromString(token));
