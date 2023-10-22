@@ -1,7 +1,10 @@
 package ku.cs.backendapi.controller;
 
+import ku.cs.backendapi.exception.AuthException;
+import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.RegisterRestaurant;
 import ku.cs.backendapi.model.UnApprovedRestaurantTitle;
+import ku.cs.backendapi.model.UnapprovedRestaurant;
 import ku.cs.backendapi.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +23,13 @@ public class ContentController {
         return service.getAllCategory();
     }
 
+    @GetMapping("/unapproved/list")
+    public List<UnApprovedRestaurantTitle> getAllUnapprovedRestaurantList() {
+        return service.getUnapprovedRestaurantList();
+    }
+
     @GetMapping("/unapproved")
-    public List<UnApprovedRestaurantTitle> getAllUnapprovedRestaurant() {
-        return service.getUnapprovedRestaurant();
+    public UnapprovedRestaurant getUnapprovedRestaurant(@RequestParam String id) throws UserNotFoundException, AuthException {
+        return service.getUnapprovedRestaurant(id);
     }
 }

@@ -1,6 +1,8 @@
 package ku.cs.backendapi.service;
 
+import ku.cs.backendapi.common.RestaurantStatus;
 import ku.cs.backendapi.entity.Admin;
+import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.entity.User;
 import ku.cs.backendapi.exception.AuthException;
 import ku.cs.backendapi.exception.UserNotFoundException;
@@ -33,6 +35,10 @@ public class AuthService {
 
         if (login.getPassword() == null || !passwordEncoder.matches(login.getPassword(), user.getPassword()))
             throw new AuthException("Password Incorrect");
+
+        if(user instanceof Restaurant) {
+            if(((Restaurant) user).getStatus() == RestaurantStatus.UNAPPROVED) throw new AuthException("Unapproved Restaurant");
+        }
 
         return String.valueOf(tokenService.createToken(user.getId()));
     }
