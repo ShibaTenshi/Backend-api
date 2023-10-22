@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/token")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http:localhost:3000", "http://10.147.17.253:3000"})
 public class TokenController {
     @Autowired
     private TokenService service;

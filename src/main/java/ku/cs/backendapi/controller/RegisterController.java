@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http:localhost:3000", "http://10.147.17.253:3000"})
 @RequestMapping("/register")
 public class RegisterController {
 
