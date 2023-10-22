@@ -4,6 +4,7 @@ import ku.cs.backendapi.common.RestaurantStatus;
 import ku.cs.backendapi.entity.Category;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exception.AuthException;
+import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.RegisterRestaurant;
 import ku.cs.backendapi.model.UnApprovedRestaurantTitle;
@@ -44,7 +45,10 @@ public class ContentService {
         return categoryNames;
     }
 
-    public List<UnApprovedRestaurantTitle> getUnapprovedRestaurantList() {
+    //Admin
+    public List<UnApprovedRestaurantTitle> getUnapprovedRestaurantList(String tokenId) throws AuthException, TokenException {
+        if(!tokenService.isAdmin(UUID.fromString(tokenId))) throw new AuthException("User Is Not Admin");
+
         List<Restaurant> unapproved = restaurantRepository.findAllByStatus(RestaurantStatus.UNAPPROVED);
         List<UnApprovedRestaurantTitle> unApprovedRestaurantTitles = new ArrayList<>();
 
@@ -58,7 +62,10 @@ public class ContentService {
         return unApprovedRestaurantTitles;
     }
 
-    public UnapprovedRestaurant getUnapprovedRestaurant(String id) throws UserNotFoundException, AuthException {
+    //Admin
+    public UnapprovedRestaurant getUnapprovedRestaurant(String tokenId, String id) throws UserNotFoundException, AuthException, TokenException {
+        if(!tokenService.isAdmin(UUID.fromString(tokenId))) throw new AuthException("User Is Not Admin");
+
         Optional<Restaurant> record = restaurantRepository.findById(UUID.fromString(id));
         if(record.isEmpty()) throw new UserNotFoundException("Restaurant Not Found");
         if(record.get().getStatus() == RestaurantStatus.APPROVED) throw new AuthException("Restaurant Already Approved");
