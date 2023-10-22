@@ -7,4 +7,5 @@ import lombok.EqualsAndHashCode;
 @Data
 public class UnapprovedRestaurant extends RegisterRestaurant{
     private String id;
+    private String dateAdded;
 }
