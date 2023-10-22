@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = {"http:localhost:3000", "http://10.147.17.253:3000"})
+@CrossOrigin
 @RequestMapping("/auth")
 public class AuthController {
     @Autowired
