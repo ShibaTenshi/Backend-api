@@ -6,16 +6,19 @@ import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.ManageOwnerProfileRequest;
 import ku.cs.backendapi.model.ManageRestaurantInformationRequest;
+import ku.cs.backendapi.model.OwnerProfileDTO;
 import ku.cs.backendapi.model.RestaurantInformationDTO;
 import ku.cs.backendapi.repository.CategoryRepository;
 import ku.cs.backendapi.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-public class ManageRestaurantInformationService {
+public class ManageRestaurantProfileService {
     @Autowired
     TokenService tokenService;
 
@@ -24,6 +27,33 @@ public class ManageRestaurantInformationService {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    public OwnerProfileDTO getOwner(String tokenId) throws UserNotFoundException, TokenException {
+        Restaurant restaurant = (Restaurant) tokenService.getUser(UUID.fromString(tokenId));
+
+        OwnerProfileDTO ownerProfileDTO = new OwnerProfileDTO();
+        ownerProfileDTO.setOwnerName(restaurant.getOwnerName());
+        ownerProfileDTO.setUsername(restaurant.getUsername());
+        ownerProfileDTO.setEmail(restaurant.getEmail());
+        ownerProfileDTO.setRestaurantName(restaurant.getRestaurantName());
+
+        return ownerProfileDTO;
+    }
+
+    public void changeOwnerPassword(ManageOwnerProfileRequest request) throws UserNotFoundException, TokenException, AuthException {
+        Restaurant restaurant = (Restaurant) tokenService.getUser(UUID.fromString(request.getTokenId()));
+
+        if (request.getOldPassword() != null && request.getNewPassword() != null) {
+            if (BCrypt.checkpw(request.getOldPassword(), restaurant.getPassword())) {
+                String hashedPassword = passwordEncoder.encode(request.getNewPassword());
+                restaurant.setPassword(hashedPassword);
+                restaurantRepository.save(restaurant);
+            } else throw new AuthException("Password Mismatch");
+        } else throw new AuthException("One or more required fields are missing");
+    }
 
     public RestaurantInformationDTO getRestaurant(String tokenId) throws UserNotFoundException, TokenException {
         Restaurant restaurant = (Restaurant) tokenService.getUser(UUID.fromString(tokenId));
@@ -41,7 +71,7 @@ public class ManageRestaurantInformationService {
         return restaurantInformationDTO;
     }
 
-    public void changeInformation(ManageRestaurantInformationRequest request) throws UserNotFoundException, TokenException, AuthException {
+    public void changeRestaurantInformation(ManageRestaurantInformationRequest request) throws UserNotFoundException, TokenException, AuthException {
         Restaurant restaurant = (Restaurant) tokenService.getUser(UUID.fromString(request.getTokenId()));
 
         if (request.getCategory() != null
