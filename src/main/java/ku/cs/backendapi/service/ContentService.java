@@ -70,6 +70,9 @@ public class ContentService {
         if(record.isEmpty()) throw new UserNotFoundException("Restaurant Not Found");
         if(record.get().getStatus() == RestaurantStatus.APPROVED) throw new AuthException("Restaurant Already Approved");
 
-        return modelMapper.map(record.get(), UnapprovedRestaurant.class);
+        UnapprovedRestaurant unapprovedRestaurant = modelMapper.map(record.get(), UnapprovedRestaurant.class);
+        unapprovedRestaurant.setDateAdded(record.get().getDateAdded().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
+
+        return unapprovedRestaurant;
     }
 }
