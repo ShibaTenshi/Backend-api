@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class RegisterService {
 
@@ -86,6 +88,7 @@ public class RegisterService {
 
         Restaurant record = modelMapper.map(restaurant, Restaurant.class);
         record.setStatus(RestaurantStatus.UNAPPROVED);
+        record.setDateAdded(LocalDateTime.now());
         record.setCategory(categoryRepository.findByCategoryName(restaurant.getCategory()));
 
         return otpService.getNewOtpRegister(record);

@@ -1,6 +1,7 @@
 package ku.cs.backendapi.controller;
 
 import ku.cs.backendapi.model.RegisterRestaurant;
+import ku.cs.backendapi.model.UnApprovedRestaurantTitle;
 import ku.cs.backendapi.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class ContentController {
     }
 
     @GetMapping("/unapproved")
-    public List<RegisterRestaurant> getAllUnapprovedRestaurant() {
+    public List<UnApprovedRestaurantTitle> getAllUnapprovedRestaurant() {
         return service.getUnapprovedRestaurant();
     }
 }

@@ -5,6 +5,7 @@ import ku.cs.backendapi.common.RestaurantStatus;
 import lombok.Data;
 
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +36,7 @@ public class Restaurant implements User{
     private String location;
     private String mapLink;
     private String openDate;
+    private LocalDateTime dateAdded;
 
     @Enumerated(EnumType.STRING)
     private RestaurantStatus status;

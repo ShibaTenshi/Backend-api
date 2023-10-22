@@ -4,12 +4,15 @@ import ku.cs.backendapi.common.RestaurantStatus;
 import ku.cs.backendapi.entity.Category;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.model.RegisterRestaurant;
+import ku.cs.backendapi.model.UnApprovedRestaurantTitle;
 import ku.cs.backendapi.repository.CategoryRepository;
 import ku.cs.backendapi.repository.RestaurantRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,14 +39,17 @@ public class ContentService {
         return categoryNames;
     }
 
-    public List<RegisterRestaurant> getUnapprovedRestaurant() {
+    public List<UnApprovedRestaurantTitle> getUnapprovedRestaurant() {
         List<Restaurant> unapproved = restaurantRepository.findAllByStatus(RestaurantStatus.UNAPPROVED);
-        List<RegisterRestaurant> registerRestaurants = new ArrayList<>();
+        List<UnApprovedRestaurantTitle> unApprovedRestaurantTitles = new ArrayList<>();
 
         for(Restaurant restaurant : unapproved) {
-            registerRestaurants.add(modelMapper.map(restaurant, RegisterRestaurant.class));
+            UnApprovedRestaurantTitle temp = modelMapper.map(restaurant, UnApprovedRestaurantTitle.class);
+            temp.setCategory(restaurant.getCategory().getCategoryName());
+            temp.setDateAdded(restaurant.getDateAdded().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
+            unApprovedRestaurantTitles.add(temp);
         }
 
-        return registerRestaurants;
+        return unApprovedRestaurantTitles;
     }
 }
