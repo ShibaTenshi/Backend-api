@@ -1,23 +1,20 @@
 package ku.cs.backendapi.service;
 
+import ku.cs.backendapi.common.RestaurantStatus;
 import ku.cs.backendapi.entity.Category;
-import ku.cs.backendapi.entity.User;
-import ku.cs.backendapi.exception.TokenNotfoundException;
-import ku.cs.backendapi.exception.UserNotFoundException;
+import ku.cs.backendapi.entity.Restaurant;
+import ku.cs.backendapi.model.RegisterRestaurant;
 import ku.cs.backendapi.repository.CategoryRepository;
+import ku.cs.backendapi.repository.RestaurantRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class ContentService {
-
-    private String host = "https://content.doksakura.com";
 
     @Autowired
     TokenService tokenService;
@@ -28,11 +25,8 @@ public class ContentService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    public String getImageLinkCustomer(UUID tokenId) throws UserNotFoundException, TokenNotfoundException {
-        User user = tokenService.getUser(tokenId);
-        if(user.getImageLink() == null) return host + "/shibaqueue/userImage/profile.png";
-        return user.getImageLink();
-    }
+    @Autowired
+    RestaurantRepository restaurantRepository;
 
     public List<String> getAllCategory() {
         List<String> categoryNames = new ArrayList<>();
@@ -40,5 +34,16 @@ public class ContentService {
             categoryNames.add(category.getCategoryName());
         }
         return categoryNames;
+    }
+
+    public List<RegisterRestaurant> getUnapprovedRestaurant() {
+        List<Restaurant> unapproved = restaurantRepository.findAllByStatus(RestaurantStatus.UNAPPROVED);
+        List<RegisterRestaurant> registerRestaurants = new ArrayList<>();
+
+        for(Restaurant restaurant : unapproved) {
+            registerRestaurants.add(modelMapper.map(restaurant, RegisterRestaurant.class));
+        }
+
+        return registerRestaurants;
     }
 }

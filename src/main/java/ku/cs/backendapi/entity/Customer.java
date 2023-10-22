@@ -21,7 +21,6 @@ public class Customer implements User{
     @OneToMany(mappedBy = "customer")
     private List<Booking> bookingList;
 
-    private String imageLink;
     private String username;
     private String password;
     private String email;

@@ -24,14 +24,12 @@ public class Restaurant implements User{
     @OneToMany
     private List<Booking> bookingList;
 
-    private String imageLink;
     private String ownerName;
     private String username;
     private String password;
     private String email;
     private String restaurantName;
     private String description;
-    private String menuLink;
     private String openTime;
     private String closeTime;
     private String location;

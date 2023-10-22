@@ -5,9 +5,8 @@ import ku.cs.backendapi.entity.Booking;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.entity.TableType;
-import ku.cs.backendapi.exception.RestaurantNotFoundException;
-import ku.cs.backendapi.exception.TableTypeNotFoundException;
-import ku.cs.backendapi.exception.TokenNotfoundException;
+import ku.cs.backendapi.exception.TableException;
+import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.BookingRequest;
 import ku.cs.backendapi.repository.BookingRepository;
@@ -17,10 +16,8 @@ import ku.cs.backendapi.repository.TableTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -42,19 +39,17 @@ public class BookingService {
 
     public void booking(BookingRequest bookingRequest)
             throws UserNotFoundException,
-            TokenNotfoundException,
-            RestaurantNotFoundException,
-            TableTypeNotFoundException {
+            TableException, TokenException {
 
         Customer customer = (Customer) tokenService.getUser(UUID.fromString(bookingRequest.getTokenId()));
         Restaurant restaurant = restaurantRepository.findByRestaurantName(bookingRequest.getRestaurantName());
         if (restaurant == null) {
-            throw new RestaurantNotFoundException();
+            throw new UserNotFoundException("Restaurant Not Found");
         }
 
         TableType tableType = tableTypeRepository.findBySeatNumber(bookingRequest.getSeatNumber());
         if (tableType == null) {
-            throw new TableTypeNotFoundException();
+            throw new TableException("Table Type Not Found");
         }
 
         Booking booking = new Booking();

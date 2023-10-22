@@ -3,8 +3,7 @@ package ku.cs.backendapi.service;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.entity.User;
-import ku.cs.backendapi.exception.OTPExpiredException;
-import ku.cs.backendapi.exception.OTPIncorrectException;
+import ku.cs.backendapi.exception.OTPException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.MailBody;
 import ku.cs.backendapi.model.OTP;
@@ -49,7 +48,7 @@ public class OTPService {
         return otp.getRefer();
     }
 
-    public void otpValidate(String refer, String otpNumber) throws OTPExpiredException, OTPIncorrectException, UserNotFoundException {
+    public void otpValidate(String refer, String otpNumber) throws OTPException, UserNotFoundException {
         if(otpReferList.otpValidate(refer, otpNumber)) {
             addUser(otpReferList.getUser(refer));
         }

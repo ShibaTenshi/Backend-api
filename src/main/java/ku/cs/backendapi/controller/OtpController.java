@@ -1,7 +1,6 @@
 package ku.cs.backendapi.controller;
 
-import ku.cs.backendapi.exception.OTPExpiredException;
-import ku.cs.backendapi.exception.OTPIncorrectException;
+import ku.cs.backendapi.exception.OTPException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.OTP;
 import ku.cs.backendapi.service.OTPService;
@@ -22,7 +21,7 @@ public class OtpController {
     }
 
     @PostMapping
-    public void validateOtp(@RequestParam String refer, String otpNumber) throws OTPExpiredException, OTPIncorrectException, UserNotFoundException {
+    public void validateOtp(@RequestParam String refer, String otpNumber) throws OTPException, UserNotFoundException {
         otpService.otpValidate(refer, otpNumber);
     }
 

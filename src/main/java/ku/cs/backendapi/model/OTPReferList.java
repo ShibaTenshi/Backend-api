@@ -1,8 +1,7 @@
 package ku.cs.backendapi.model;
 
 import ku.cs.backendapi.entity.User;
-import ku.cs.backendapi.exception.OTPExpiredException;
-import ku.cs.backendapi.exception.OTPIncorrectException;
+import ku.cs.backendapi.exception.OTPException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 
 import java.time.LocalTime;
@@ -36,15 +35,15 @@ public class OTPReferList {
         return otp;
     }
 
-    public boolean otpValidate(String otpRefer, String requestOtp) throws OTPIncorrectException, OTPExpiredException {
+    public boolean otpValidate(String otpRefer, String requestOtp) throws OTPException {
         Optional<OTP> optionalOTP = otpList.stream().filter(otp -> otp.getRefer().equals(otpRefer)).findFirst();
         if (optionalOTP.isPresent()) {
             if (optionalOTP.get().getOtp().equals(requestOtp)) {
                 return true;
             }
-            throw new OTPIncorrectException();
+            throw new OTPException("OTP Incorrect");
         }
-        throw new OTPExpiredException();
+        throw new OTPException("OTP Expired");
     }
 
     public OTP[] getAllOtp() {
@@ -57,6 +56,6 @@ public class OTPReferList {
             otpList.remove(optionalOTP.get());
             return optionalOTP.get().getUser();
         }
-        throw new UserNotFoundException();
+        throw new UserNotFoundException("User Not Found");
     }
 }

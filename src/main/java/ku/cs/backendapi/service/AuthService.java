@@ -2,7 +2,7 @@ package ku.cs.backendapi.service;
 
 import ku.cs.backendapi.entity.Admin;
 import ku.cs.backendapi.entity.User;
-import ku.cs.backendapi.exception.PasswordNotCorrectException;
+import ku.cs.backendapi.exception.AuthException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.Login;
 import ku.cs.backendapi.repository.AdminRepository;
@@ -28,31 +28,31 @@ public class AuthService {
     @Autowired
     AdminRepository adminRepository;
 
-    private String auth(User user, Login login) throws UserNotFoundException, PasswordNotCorrectException {
-        if (user == null || login.getUsername() == null) throw new UserNotFoundException();
+    private String auth(User user, Login login) throws UserNotFoundException, AuthException {
+        if (user == null || login.getUsername() == null) throw new UserNotFoundException("User Not Found");
 
         if (login.getPassword() == null || !passwordEncoder.matches(login.getPassword(), user.getPassword()))
-            throw new PasswordNotCorrectException();
+            throw new AuthException("Password Incorrect");
 
         return String.valueOf(tokenService.createToken(user.getId()));
     }
 
-    public String loginCustomer(Login login) throws UserNotFoundException, PasswordNotCorrectException {
+    public String loginCustomer(Login login) throws UserNotFoundException, AuthException {
         User customer = customerRepository.findByUsername(login.getUsername());
         return auth(customer, login);
     }
 
-    public String loginRestaurant(Login login) throws UserNotFoundException, PasswordNotCorrectException {
+    public String loginRestaurant(Login login) throws UserNotFoundException, AuthException {
         User restaurant = restaurantRepository.findByUsername(login.getUsername());
         return auth(restaurant, login);
     }
 
-    public String loginAdmin(Login login) throws UserNotFoundException, PasswordNotCorrectException {
+    public String loginAdmin(Login login) throws UserNotFoundException, AuthException {
         Admin admin = adminRepository.findByUsername(login.getUsername());
-        if (admin == null || login.getUsername() == null) throw new UserNotFoundException();
+        if (admin == null || login.getUsername() == null) throw new UserNotFoundException("User Not Found");
 
         if (login.getPassword() == null || !passwordEncoder.matches(login.getPassword(), admin.getPassword()))
-            throw new PasswordNotCorrectException();
+            throw new AuthException("Password Incorrect");
 
         return String.valueOf(tokenService.createToken(admin.getId()));
     }

@@ -1,6 +1,6 @@
 package ku.cs.backendapi.controller;
 
-import ku.cs.backendapi.exception.TokenNotfoundException;
+import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,7 @@ public class TokenController {
     private TokenService service;
 
     @GetMapping
-    public void tokenValidate(@RequestParam String token) throws TokenNotfoundException {
+    public void tokenValidate(@RequestParam String token) throws TokenException {
         service.validateToken(UUID.fromString(token));
     }
 

@@ -1,6 +1,6 @@
 package ku.cs.backendapi.controller;
 
-import ku.cs.backendapi.exception.PasswordNotCorrectException;
+import ku.cs.backendapi.exception.AuthException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.Login;
 import ku.cs.backendapi.service.AuthService;
@@ -17,17 +17,17 @@ public class AuthController {
     AuthService service;
 
     @PostMapping("/login/customer")
-    public String loginCustomer(@RequestBody Login login) throws UserNotFoundException, PasswordNotCorrectException {
+    public String loginCustomer(@RequestBody Login login) throws UserNotFoundException, AuthException {
         return service.loginCustomer(login);
     }
 
     @PostMapping("/login/restaurant")
-    public String loginRestaurant(@RequestBody Login login) throws UserNotFoundException, PasswordNotCorrectException {
+    public String loginRestaurant(@RequestBody Login login) throws UserNotFoundException, AuthException {
         return service.loginRestaurant(login);
     }
 
     @PostMapping("/login/admin")
-    public String loginAdmin(@RequestBody Login login) throws UserNotFoundException, PasswordNotCorrectException {
+    public String loginAdmin(@RequestBody Login login) throws UserNotFoundException, AuthException {
         return service.loginAdmin(login);
     }
 

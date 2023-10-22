@@ -1,13 +1,11 @@
 package ku.cs.backendapi.service;
 
+import jakarta.security.auth.message.AuthException;
 import ku.cs.backendapi.common.RestaurantStatus;
 import ku.cs.backendapi.entity.Admin;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
-import ku.cs.backendapi.exception.MailAlreadyRegisterException;
-import ku.cs.backendapi.exception.MailFormatException;
-import ku.cs.backendapi.exception.RestaurantNameAlreadyRegisterException;
-import ku.cs.backendapi.exception.UsernameAlreadyRegisterException;
+import ku.cs.backendapi.exception.MailException;
 import ku.cs.backendapi.model.RegisterCustomer;
 import ku.cs.backendapi.model.RegisterRestaurant;
 import ku.cs.backendapi.repository.AdminRepository;
@@ -67,10 +65,10 @@ public class RegisterService {
         return mail.endsWith("gmail.com") || mail.endsWith("ku.th");
     }
 
-    public String createCustomer(RegisterCustomer customer) throws MailAlreadyRegisterException, UsernameAlreadyRegisterException, MailFormatException {
-        if (isCustomerEmailAvailable(customer.getEmail())) throw new MailAlreadyRegisterException();
-        if (isCustomerUserNameAvailable(customer.getUsername())) throw new UsernameAlreadyRegisterException();
-        if (!checkMailFormat(customer.getEmail())) throw new MailFormatException();
+    public String createCustomer(RegisterCustomer customer) throws MailException, AuthException {
+        if (isCustomerEmailAvailable(customer.getEmail())) throw new AuthException("Mail Already Exited");
+        if (isCustomerUserNameAvailable(customer.getUsername())) throw new AuthException("Username Already Exited");
+        if (!checkMailFormat(customer.getEmail())) throw new MailException("Mail Format Incorrect");
 
         Customer record = modelMapper.map(customer, Customer.class);
 
@@ -80,11 +78,11 @@ public class RegisterService {
         return otpService.getNewOtpRegister(record);
     }
 
-    public String createRestaurant(RegisterRestaurant restaurant) throws MailAlreadyRegisterException, UsernameAlreadyRegisterException, RestaurantNameAlreadyRegisterException, MailFormatException {
-        if (isRestaurantEmailAvailable(restaurant.getEmail())) throw new MailAlreadyRegisterException();
-        if (isRestaurantUserNameAvailable(restaurant.getUsername())) throw new UsernameAlreadyRegisterException();
-        if (isRestaurantNameAvailable(restaurant.getRestaurantName())) throw new RestaurantNameAlreadyRegisterException();
-        if (!checkMailFormat(restaurant.getEmail())) throw new MailFormatException();
+    public String createRestaurant(RegisterRestaurant restaurant) throws MailException, AuthException {
+        if (isRestaurantEmailAvailable(restaurant.getEmail())) throw new AuthException("Mail Already Exited");
+        if (isRestaurantUserNameAvailable(restaurant.getUsername())) throw new AuthException("Username Already Exited");
+        if (isRestaurantNameAvailable(restaurant.getRestaurantName())) throw new AuthException("Restaurant Name Already Exited");
+        if (!checkMailFormat(restaurant.getEmail())) throw new MailException("Mail Format Incorrect");
 
         Restaurant record = modelMapper.map(restaurant, Restaurant.class);
         record.setStatus(RestaurantStatus.UNAPPROVED);
