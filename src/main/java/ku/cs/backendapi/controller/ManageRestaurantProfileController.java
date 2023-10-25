@@ -12,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/restaurant")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class ManageRestaurantProfileController {
     @Autowired
     private ManageRestaurantProfileService manageRestaurantProfileService;
@@ -23,7 +22,7 @@ public class ManageRestaurantProfileController {
         return manageRestaurantProfileService.getOwner(tokenId);
     }
 
-    @PostMapping("/profile")
+    @PostMapping("/profile/changePassword")
     public void changeOwnerPassword(@RequestBody ManageOwnerProfileRequest request) throws UserNotFoundException, TokenException, AuthException {
         manageRestaurantProfileService.changeOwnerPassword(request);
     }
@@ -33,7 +32,7 @@ public class ManageRestaurantProfileController {
         return manageRestaurantProfileService.getRestaurant(tokenId);
     }
 
-    @PostMapping("/information")
+    @PostMapping("/information/changeInformation")
     public void changeRestaurantInformation(@RequestBody ManageRestaurantInformationRequest request) throws UserNotFoundException, TokenException, AuthException {
         manageRestaurantProfileService.changeRestaurantInformation(request);
     }
