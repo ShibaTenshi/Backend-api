@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/token")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class TokenController {
     @Autowired
     private TokenService service;
@@ -17,10 +17,5 @@ public class TokenController {
     @GetMapping
     public void tokenValidate(@RequestParam String token) throws TokenException {
         service.validateToken(UUID.fromString(token));
-    }
-
-    @GetMapping("/all")
-    public String getAll() {
-        return service.getTokenMap();
     }
 }

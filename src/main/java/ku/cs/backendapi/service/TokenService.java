@@ -61,6 +61,11 @@ public class TokenService {
         throw new UserNotFoundException("Admin Not Found");
     }
 
+    public boolean isAdmin(UUID tokenId) throws TokenException {
+        Optional<Admin> admin = adminRepository.findById(tokenList.getUserId(tokenId));
+        return admin.isPresent();
+    }
+
     public void removeToken(UUID tokenId) {
         tokenList.removeToken(tokenId);
     }

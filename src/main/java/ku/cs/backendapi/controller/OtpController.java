@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/otp")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 public class OtpController {
 
     @Autowired
