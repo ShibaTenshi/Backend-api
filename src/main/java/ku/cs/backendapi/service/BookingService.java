@@ -9,6 +9,7 @@ import ku.cs.backendapi.exception.TableException;
 import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.BookingRequest;
+import ku.cs.backendapi.model.CustomerBooking;
 import ku.cs.backendapi.repository.BookingRepository;
 import ku.cs.backendapi.repository.CustomerRepository;
 import ku.cs.backendapi.repository.RestaurantRepository;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -60,5 +63,46 @@ public class BookingService {
         booking.setStatus(Status.IN_PROGRESS);
 
         bookingRepository.save(booking);
+    }
+
+    public List<CustomerBooking> getAllCustomerBooking(String tokenId) throws UserNotFoundException, TokenException {
+        Customer customer = (Customer) tokenService.getUser(UUID.fromString(tokenId));
+
+        if (customer != null) {
+            List<CustomerBooking> customerBookingList = new ArrayList<>();
+            List<Booking> bookingList = bookingRepository.findAllByCustomer_Id(customer.getId());
+            for (Booking booking : bookingList) {
+                CustomerBooking dto = new CustomerBooking();
+                dto.setBookingId(String.valueOf(booking.getIdBooking()));
+                dto.setRestaurantName(booking.getIdRestaurant().getRestaurantName());
+                dto.setDescription(booking.getIdRestaurant().getDescription());
+                dto.setStatus(String.valueOf(booking.getStatus()));
+                dto.setDate(formatDate(booking.getDateTime()));
+                dto.setTime(formatTime(booking.getDateTime()));
+
+                customerBookingList.add(dto);
+            }
+            return customerBookingList;
+        }
+        throw new UserNotFoundException("User not found");
+    }
+
+    public void cancelBooking(String bookingId) throws UserNotFoundException {
+        Booking booking = bookingRepository.findByIdBooking(UUID.fromString(bookingId));
+
+        if (booking != null) {
+            booking.setStatus(Status.CANCELED);
+            bookingRepository.save(booking);
+        } else throw new UserNotFoundException("Booking not found");
+    }
+
+    private static String formatDate(LocalDateTime dateTime) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return dateTime.format(dateFormatter);
+    }
+
+    private static String formatTime(LocalDateTime dateTime) {
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+        return dateTime.format(timeFormatter);
     }
 }
