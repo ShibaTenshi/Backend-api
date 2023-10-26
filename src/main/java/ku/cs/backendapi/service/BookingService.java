@@ -65,22 +65,24 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
-    public List<CustomerBooking> getAllCustomerBooking(String tokenId) throws UserNotFoundException, TokenException {
+    public List<CustomerBooking> getAllCustomerBookingHistory(String tokenId) throws UserNotFoundException, TokenException {
         Customer customer = (Customer) tokenService.getUser(UUID.fromString(tokenId));
 
         if (customer != null) {
             List<CustomerBooking> customerBookingList = new ArrayList<>();
             List<Booking> bookingList = bookingRepository.findAllByCustomer_Id(customer.getId());
             for (Booking booking : bookingList) {
-                CustomerBooking dto = new CustomerBooking();
-                dto.setBookingId(String.valueOf(booking.getIdBooking()));
-                dto.setRestaurantName(booking.getIdRestaurant().getRestaurantName());
-                dto.setDescription(booking.getIdRestaurant().getDescription());
-                dto.setStatus(String.valueOf(booking.getStatus()));
-                dto.setDate(formatDate(booking.getDateTime()));
-                dto.setTime(formatTime(booking.getDateTime()));
+                if (booking.getStatus() == Status.COMPLETED || booking.getStatus() == Status.CANCELED) {
+                    CustomerBooking dto = new CustomerBooking();
+                    dto.setBookingId(String.valueOf(booking.getIdBooking()));
+                    dto.setRestaurantName(booking.getIdRestaurant().getRestaurantName());
+                    dto.setDescription(booking.getIdRestaurant().getDescription());
+                    dto.setStatus(String.valueOf(booking.getStatus()));
+                    dto.setDate(formatDate(booking.getDateTime()));
+                    dto.setTime(formatTime(booking.getDateTime()));
 
-                customerBookingList.add(dto);
+                    customerBookingList.add(dto);
+                }
             }
             return customerBookingList;
         }
