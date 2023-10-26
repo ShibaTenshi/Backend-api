@@ -17,8 +17,8 @@ public class CustomerBookingController {
     BookingService service;
 
     @GetMapping
-    public List<CustomerBooking> getAllCustomerBooking(@RequestParam String tokenId) throws UserNotFoundException, TokenException {
-        return service.getAllCustomerBooking(tokenId);
+    public List<CustomerBooking> getAllCustomerBookingHistory(@RequestParam String tokenId) throws UserNotFoundException, TokenException {
+        return service.getAllCustomerBookingHistory(tokenId);
     }
 
     @PostMapping("/cancel")
