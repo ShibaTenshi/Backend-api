@@ -75,4 +75,11 @@ public class ContentService {
 
         return unapprovedRestaurant;
     }
+    public Optional<Restaurant> getRestaurantInfo(String tokenId, String id) throws UserNotFoundException{
+
+        Optional<Restaurant> selectedRestaurant = restaurantRepository.findById(UUID.fromString(id));
+        if(selectedRestaurant.isEmpty()) throw new UserNotFoundException("Restaurant Not Found");
+
+        return selectedRestaurant;
+    }
 }

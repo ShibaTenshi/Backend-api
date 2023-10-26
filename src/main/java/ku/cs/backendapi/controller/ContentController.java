@@ -1,5 +1,6 @@
 package ku.cs.backendapi.controller;
 
+import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exception.AuthException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.RegisterRestaurant;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/content")
@@ -21,5 +23,9 @@ public class ContentController {
     @GetMapping("/category")
     public List<String> getAllCategory() {
         return service.getAllCategory();
+    }
+
+    public Optional<Restaurant> getRestaurantInfo(@RequestParam String tokenId, String id) throws UserNotFoundException{
+        return service.getRestaurantInfo(tokenId, id);
     }
 }
