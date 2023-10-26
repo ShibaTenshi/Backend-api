@@ -7,6 +7,7 @@ import ku.cs.backendapi.exception.AuthException;
 import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.RegisterRestaurant;
+import ku.cs.backendapi.model.SelectedRestaurant;
 import ku.cs.backendapi.model.UnApprovedRestaurantTitle;
 import ku.cs.backendapi.model.UnapprovedRestaurant;
 import ku.cs.backendapi.repository.CategoryRepository;
@@ -75,10 +76,12 @@ public class ContentService {
 
         return unapprovedRestaurant;
     }
-    public Optional<Restaurant> getRestaurantInfo(String tokenId, String id) throws UserNotFoundException{
+    public SelectedRestaurant getRestaurantInfo(String tokenId, String id) throws UserNotFoundException{
 
-        Optional<Restaurant> selectedRestaurant = restaurantRepository.findById(UUID.fromString(id));
-        if(selectedRestaurant.isEmpty()) throw new UserNotFoundException("Restaurant Not Found");
+        Optional<Restaurant> record = restaurantRepository.findById(UUID.fromString(id));
+        if(record.isEmpty()) throw new UserNotFoundException("Restaurant Not Found");
+
+        SelectedRestaurant selectedRestaurant = modelMapper.map(record.get(), SelectedRestaurant.class);
 
         return selectedRestaurant;
     }

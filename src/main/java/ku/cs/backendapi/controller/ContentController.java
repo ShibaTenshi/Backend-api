@@ -4,6 +4,7 @@ import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exception.AuthException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.RegisterRestaurant;
+import ku.cs.backendapi.model.SelectedRestaurant;
 import ku.cs.backendapi.model.UnApprovedRestaurantTitle;
 import ku.cs.backendapi.model.UnapprovedRestaurant;
 import ku.cs.backendapi.service.ContentService;
@@ -25,7 +26,7 @@ public class ContentController {
         return service.getAllCategory();
     }
 
-    public Optional<Restaurant> getRestaurantInfo(@RequestParam String tokenId, String id) throws UserNotFoundException{
+    public SelectedRestaurant getRestaurantInfo(@RequestParam String tokenId, String id) throws UserNotFoundException{
         return service.getRestaurantInfo(tokenId, id);
     }
 }
