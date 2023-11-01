@@ -89,6 +89,30 @@ public class BookingService {
         throw new UserNotFoundException("User not found");
     }
 
+    public List<CustomerBooking> getCustomerCurrentBooking(String tokenId) throws UserNotFoundException, TokenException {
+        Customer customer = (Customer) tokenService.getUser(UUID.fromString(tokenId));
+
+        if (customer != null) {
+            List<CustomerBooking> customerBookingList = new ArrayList<>();
+            List<Booking> bookingList = bookingRepository.findAllByCustomer_Id(customer.getId());
+            for (Booking booking : bookingList) {
+                if (booking.getStatus() == Status.IN_PROGRESS ) {
+                    CustomerBooking dto = new CustomerBooking();
+                    dto.setBookingId(String.valueOf(booking.getIdBooking()));
+                    dto.setRestaurantName(booking.getIdRestaurant().getRestaurantName());
+                    dto.setDescription(booking.getIdRestaurant().getDescription());
+                    dto.setStatus(String.valueOf(booking.getStatus()));
+                    dto.setDate(formatDate(booking.getDateTime()));
+                    dto.setTime(formatTime(booking.getDateTime()));
+
+                    customerBookingList.add(dto);
+                }
+            }
+            return customerBookingList;
+        }
+        throw new UserNotFoundException("User not found");
+    }
+
     public void cancelBooking(String bookingId) throws UserNotFoundException {
         Booking booking = bookingRepository.findByIdBooking(UUID.fromString(bookingId));
 
