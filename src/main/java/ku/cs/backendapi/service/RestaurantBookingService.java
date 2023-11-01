@@ -48,13 +48,13 @@ public class RestaurantBookingService {
 
         if (restaurant != null) {
             List<RestaurantBookingDTO> restaurantBookingDTOList = new ArrayList<>();
-            List<Booking> bookingList = bookingRepository.findAllBookingByRestaurantId(restaurant.getId());
+            List<Booking> bookingList = bookingRepository.findAllByRestaurant(restaurant);
             for (Booking booking : bookingList) {
                 RestaurantBookingDTO dto = new RestaurantBookingDTO();
                 dto.setDate(formatDate(booking.getDateTime()));
                 dto.setTime(formatTime(booking.getDateTime()));
                 dto.setName(booking.getCustomer().getName());
-                dto.setSeatNumber(booking.getIdTableType().getSeatNumber());
+                dto.setSeatNumber(booking.getTableType().getSeatNumber());
 
                 restaurantBookingDTOList.add(dto);
             }

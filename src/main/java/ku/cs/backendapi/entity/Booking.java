@@ -20,10 +20,10 @@ public class Booking {
     private Customer customer;
 
     @OneToOne
-    private Restaurant idRestaurant;
+    private Restaurant restaurant;
 
     @OneToOne
-    private TableType idTableType;
+    private TableType tableType;
 
     @Enumerated(EnumType.STRING)
     private Status status;

@@ -6,7 +6,6 @@ import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exception.AuthException;
 import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
-import ku.cs.backendapi.model.RegisterRestaurant;
 import ku.cs.backendapi.model.UnApprovedRestaurantTitle;
 import ku.cs.backendapi.model.UnapprovedRestaurant;
 import ku.cs.backendapi.repository.CategoryRepository;

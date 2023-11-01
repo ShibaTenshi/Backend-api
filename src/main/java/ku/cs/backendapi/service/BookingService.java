@@ -58,8 +58,8 @@ public class BookingService {
         Booking booking = new Booking();
         booking.setDateTime(LocalDateTime.parse(bookingRequest.getDateTime(), DateTimeFormatter.ISO_DATE_TIME));
         booking.setCustomer(customer);
-        booking.setIdRestaurant(restaurant);
-        booking.setIdTableType(tableType);
+        booking.setRestaurant(restaurant);
+        booking.setTableType(tableType);
         booking.setStatus(Status.IN_PROGRESS);
 
         bookingRepository.save(booking);
@@ -75,8 +75,8 @@ public class BookingService {
                 if (booking.getStatus() == Status.COMPLETED || booking.getStatus() == Status.CANCELED) {
                     CustomerBooking dto = new CustomerBooking();
                     dto.setBookingId(String.valueOf(booking.getIdBooking()));
-                    dto.setRestaurantName(booking.getIdRestaurant().getRestaurantName());
-                    dto.setDescription(booking.getIdRestaurant().getDescription());
+                    dto.setRestaurantName(booking.getRestaurant().getRestaurantName());
+                    dto.setDescription(booking.getRestaurant().getDescription());
                     dto.setStatus(String.valueOf(booking.getStatus()));
                     dto.setDate(formatDate(booking.getDateTime()));
                     dto.setTime(formatTime(booking.getDateTime()));
