@@ -59,7 +59,7 @@ public class ManageRestaurantProfileService {
         Restaurant restaurant = (Restaurant) tokenService.getUser(UUID.fromString(tokenId));
 
         RestaurantInformationDTO restaurantInformationDTO = new RestaurantInformationDTO();
-        restaurantInformationDTO.setCategory(restaurant.getCategory());
+        restaurantInformationDTO.setCategoryName(restaurant.getCategory().getCategoryName());
         restaurantInformationDTO.setRestaurantName(restaurant.getRestaurantName());
         restaurantInformationDTO.setDescription(restaurant.getDescription());
         restaurantInformationDTO.setOpenTime(restaurant.getOpenTime());
