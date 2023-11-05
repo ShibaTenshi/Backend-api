@@ -71,7 +71,7 @@ public class ContentService {
 
         UnapprovedRestaurant unapprovedRestaurant = modelMapper.map(record.get(), UnapprovedRestaurant.class);
         unapprovedRestaurant.setDateAdded(record.get().getDateAdded().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
-
+        unapprovedRestaurant.setId(record.get().getId().toString());
         return unapprovedRestaurant;
     }
 }

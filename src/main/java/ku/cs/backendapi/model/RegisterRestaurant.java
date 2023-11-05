@@ -13,6 +13,5 @@ public class RegisterRestaurant {
     private String openTime;
     private String closeTime;
     private String location;
-    private String mapLink;
     private String openDate;
 }

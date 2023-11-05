@@ -1,5 +1,6 @@
 package ku.cs.backendapi.service;
 
+import ku.cs.backendapi.common.URL;
 import ku.cs.backendapi.entity.Customer;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.entity.User;
@@ -37,14 +38,14 @@ public class OTPService {
 
     public String getNewOtpRegister(User user) {
         OTP otp = otpReferList.getNewOtp(user);
-        postMethod("http://10.147.17.253:5042/sendotp", new MailBody(user.getEmail(), user.getUsername(), otp.getOtp()));
+        postMethod(URL.MAIL + "/sendotp", new MailBody(user.getEmail(), user.getUsername(), otp.getOtp(), otp.getRefer()));
         return otp.getRefer();
     }
 
     public String requestNewOtp(String oldRefer) throws UserNotFoundException {
         User user = otpReferList.getUser(oldRefer);
         OTP otp = otpReferList.getNewOtp(user);
-        postMethod("http://10.147.17.253:5042/sendotp", new MailBody(user.getEmail(), user.getUsername(), otp.getOtp()));
+        postMethod(URL.MAIL + "/sendotp", new MailBody(user.getEmail(), user.getUsername(), otp.getOtp(), otp.getRefer()));
         return otp.getRefer();
     }
 
