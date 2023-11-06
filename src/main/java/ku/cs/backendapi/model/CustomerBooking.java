@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class CustomerBooking {
-    private String bookingId;
+    private String id;
     private String restaurantName;
-    private String description;
+    private String logo;
     private String status;
-    private String date;
-    private String time;
+    private String dateTime;
+    private String numSeat;
 }

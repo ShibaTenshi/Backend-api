@@ -1,6 +1,7 @@
 package ku.cs.backendapi.controller;
 
 import ku.cs.backendapi.exception.AuthException;
+import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.Login;
 import ku.cs.backendapi.service.AuthService;
@@ -34,5 +35,10 @@ public class AuthController {
     @PostMapping("/logout")
     public void logout(@RequestParam String tokenId) {
         service.removeToken(UUID.fromString(tokenId));
+    }
+
+    @PostMapping("/deleteUser")
+    public void deleteUser(@RequestParam String tokenId) throws UserNotFoundException, TokenException {
+        service.deleteUser(tokenId);
     }
 }

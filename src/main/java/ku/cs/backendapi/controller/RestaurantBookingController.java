@@ -25,7 +25,7 @@ public class RestaurantBookingController {
         return service.getRestaurantDescription(tokenId);
     }
 
-    @GetMapping("/bookings")
+    @GetMapping("/booking")
     public List<RestaurantBookingDTO> getAllBooking(@RequestParam String tokenId) throws UserNotFoundException, TokenException {
         return service.getAllBooking(tokenId);
     }

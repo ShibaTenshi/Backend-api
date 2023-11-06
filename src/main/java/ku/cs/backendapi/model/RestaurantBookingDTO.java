@@ -4,8 +4,7 @@ import lombok.Data;
 
 @Data
 public class RestaurantBookingDTO {
-    private String date;
     private String name;
-    private String time;
-    private int seatNumber;
+    private String dateTime;
+    private String seatNumber;
 }

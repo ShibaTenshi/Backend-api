@@ -1,18 +1,17 @@
 package ku.cs.backendapi.service;
 
 import ku.cs.backendapi.common.RestaurantStatus;
-import ku.cs.backendapi.entity.Admin;
-import ku.cs.backendapi.entity.Restaurant;
-import ku.cs.backendapi.entity.User;
+import ku.cs.backendapi.common.URL;
+import ku.cs.backendapi.entity.*;
 import ku.cs.backendapi.exception.AuthException;
+import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.Login;
-import ku.cs.backendapi.repository.AdminRepository;
-import ku.cs.backendapi.repository.CustomerRepository;
-import ku.cs.backendapi.repository.RestaurantRepository;
+import ku.cs.backendapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
 
@@ -29,6 +28,10 @@ public class AuthService {
     RestaurantRepository restaurantRepository;
     @Autowired
     AdminRepository adminRepository;
+    @Autowired
+    BookingRepository bookingRepository;
+    @Autowired
+    RestaurantTableTypeRepository restaurantTableTypeRepository;
 
     private String auth(User user, Login login) throws UserNotFoundException, AuthException {
         if (user == null || login.getUsername() == null) throw new UserNotFoundException("User Not Found");
@@ -65,5 +68,22 @@ public class AuthService {
 
     public void removeToken(UUID tokenId) {
         tokenService.removeToken(tokenId);
+    }
+
+    public void deleteUser(String tokenId) throws UserNotFoundException, TokenException {
+        User user = tokenService.getUser(UUID.fromString(tokenId));
+        RestTemplate restTemplate = new RestTemplate();
+
+        if(user instanceof Customer) {
+            bookingRepository.deleteAll(bookingRepository.findAllByCustomer_Id(user.getId()));
+            customerRepository.delete((Customer) user);
+            restTemplate.postForObject(URL.STORAGE + "/remove/customer/{name}", null, String.class, user.getUsername());
+        }
+        if(user instanceof Restaurant) {
+            restaurantTableTypeRepository.deleteAll(restaurantTableTypeRepository.findByRestaurant((Restaurant) user));
+            bookingRepository.deleteAll(bookingRepository.findAllByRestaurant((Restaurant) user));
+            restaurantRepository.delete((Restaurant) user);
+            restTemplate.postForObject(URL.STORAGE + "/remove/restaurant/{name}", null, String.class, ((Restaurant) user).getRestaurantName());
+        }
     }
 }

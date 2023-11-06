@@ -1,5 +1,6 @@
 package ku.cs.backendapi.controller;
 
+import ku.cs.backendapi.common.BookingFind;
 import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.CustomerBooking;
@@ -16,18 +17,18 @@ public class CustomerBookingController {
     @Autowired
     BookingService service;
 
-    @GetMapping
+    @GetMapping("/history")
     public List<CustomerBooking> getAllCustomerBookingHistory(@RequestParam String tokenId) throws UserNotFoundException, TokenException {
-        return service.getAllCustomerBookingHistory(tokenId);
+        return service.getCustomerCurrentBooking(tokenId, BookingFind.HISTORY);
     }
 
-    @GetMapping
+    @GetMapping("/inProgress")
     public List<CustomerBooking> getCustomerCurrentBooking(@RequestParam String tokenId) throws UserNotFoundException, TokenException {
-        return service.getCustomerCurrentBooking(tokenId);
+        return service.getCustomerCurrentBooking(tokenId, BookingFind.IN_PROGRESS);
     }
 
     @PostMapping("/cancel")
-    public void cancelBooking(@RequestParam String bookingId) throws UserNotFoundException {
-        service.cancelBooking(bookingId);
+    public void cancelBooking(@RequestParam String tokenId, String bookingId) throws UserNotFoundException, TokenException {
+        service.cancelBooking(tokenId, bookingId);
     }
 }

@@ -1,5 +1,6 @@
 package ku.cs.backendapi.service;
 
+import ku.cs.backendapi.common.Status;
 import ku.cs.backendapi.entity.Booking;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exception.TokenException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,22 +48,24 @@ public class RestaurantBookingService {
     public List<RestaurantBookingDTO> getAllBooking(String tokenId) throws UserNotFoundException, TokenException {
         Restaurant restaurant = (Restaurant) tokenService.getUser(UUID.fromString(tokenId));
 
-        if (restaurant != null) {
-            List<RestaurantBookingDTO> restaurantBookingDTOList = new ArrayList<>();
-            List<Booking> bookingList = bookingRepository.findAllByRestaurant(restaurant);
-            for (Booking booking : bookingList) {
-                RestaurantBookingDTO dto = new RestaurantBookingDTO();
-                dto.setDate(formatDate(booking.getDateTime()));
-                dto.setTime(formatTime(booking.getDateTime()));
-                dto.setName(booking.getCustomer().getName());
-                //dto.setSeatNumber(booking.getTableType().getSeatNumber());
+        List<RestaurantBookingDTO> restaurantBookingDTOList = new ArrayList<>();
+        List<Booking> bookingList = bookingRepository.findAllByRestaurantAndStatus(restaurant, Status.IN_PROGRESS);
+        bookingList.sort(Comparator.comparing(booking -> booking.getDateTime().toString()));
 
-                restaurantBookingDTOList.add(dto);
+        for (Booking booking : bookingList) {
+            if (booking.getDateTime().isBefore(LocalDateTime.now().plusMinutes(30))) {
+                booking.setStatus(Status.COMPLETED);
+                bookingRepository.save(booking);
+                continue;
             }
-
-            return restaurantBookingDTOList;
+            RestaurantBookingDTO dto = new RestaurantBookingDTO();
+            dto.setDateTime(booking.getDateTime().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            dto.setName(booking.getCustomer().getName());
+            dto.setSeatNumber(String.valueOf(booking.getRestaurantTableType().getTableType().getSeatNumber()));
+            restaurantBookingDTOList.add(dto);
         }
-        throw new UserNotFoundException("Restaurant not found");
+
+        return restaurantBookingDTOList;
     }
 
     private static String formatDate(LocalDateTime dateTime) {
@@ -70,7 +74,7 @@ public class RestaurantBookingService {
     }
 
     private static String formatTime(LocalDateTime dateTime) {
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         return dateTime.format(timeFormatter);
     }
 }
