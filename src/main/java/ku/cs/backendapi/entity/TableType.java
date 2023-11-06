@@ -16,7 +16,4 @@ public class TableType {
     private UUID idTableType;
 
     private int seatNumber;
-
-    @OneToOne
-    private Booking booking;
 }

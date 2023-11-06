@@ -1,23 +1,20 @@
 package ku.cs.backendapi.service;
 
 import ku.cs.backendapi.common.Status;
-import ku.cs.backendapi.entity.Booking;
-import ku.cs.backendapi.entity.Customer;
-import ku.cs.backendapi.entity.Restaurant;
-import ku.cs.backendapi.entity.TableType;
+import ku.cs.backendapi.entity.*;
+import ku.cs.backendapi.exception.BookingException;
 import ku.cs.backendapi.exception.TableException;
 import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.BookingRequest;
 import ku.cs.backendapi.model.CustomerBooking;
-import ku.cs.backendapi.repository.BookingRepository;
-import ku.cs.backendapi.repository.CustomerRepository;
-import ku.cs.backendapi.repository.RestaurantRepository;
-import ku.cs.backendapi.repository.TableTypeRepository;
+import ku.cs.backendapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +37,12 @@ public class BookingService {
     @Autowired
     BookingRepository bookingRepository;
 
+    @Autowired
+    RestaurantTableTypeRepository restaurantTableTypeRepository;
+
     public void booking(BookingRequest bookingRequest)
             throws UserNotFoundException,
-            TableException, TokenException {
+            TableException, TokenException, BookingException {
 
         Customer customer = (Customer) tokenService.getUser(UUID.fromString(bookingRequest.getTokenId()));
         Restaurant restaurant = restaurantRepository.findByRestaurantName(bookingRequest.getRestaurantName());
@@ -50,17 +50,40 @@ public class BookingService {
             throw new UserNotFoundException("Restaurant Not Found");
         }
 
-        TableType tableType = tableTypeRepository.findBySeatNumber(bookingRequest.getSeatNumber());
-        if (tableType == null) {
+        RestaurantTableType restaurantTableType = restaurantTableTypeRepository.findByRestaurantAndTableType_SeatNumber(restaurant, Integer.parseInt(bookingRequest.getNumSeat()));
+        if (restaurantTableType == null) {
             throw new TableException("Table Type Not Found");
         }
 
+
+        String dateTime = bookingRequest.getDayTh() + "/" + bookingRequest.getMonth() + "/" + bookingRequest.getYear() + " " + bookingRequest.getTime();
         Booking booking = new Booking();
-        booking.setDateTime(LocalDateTime.parse(bookingRequest.getDateTime(), DateTimeFormatter.ISO_DATE_TIME));
+        booking.setDateTime(LocalDateTime.parse(dateTime, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         booking.setCustomer(customer);
         booking.setRestaurant(restaurant);
-        booking.setTableType(tableType);
+        booking.setRestaurantTableType(restaurantTableType);
+        booking.setIdBooking(UUID.randomUUID());
         booking.setStatus(Status.IN_PROGRESS);
+
+        String dateCheck = bookingRequest.getDayTh() + "-" + bookingRequest.getMonth() + "-" + bookingRequest.getYear();
+        System.out.println("In " + dateCheck);
+        int a = bookingRepository.query(restaurant.getId(), restaurantTableType.getId(), dateCheck);
+        System.out.println("Out " + a);
+        if (a >= restaurantTableType.getNumOfTable()) {
+            throw new TableException("This table is full");
+        }
+
+        //check open date
+        if(restaurant.getOpenDate().charAt(Integer.parseInt(bookingRequest.getDayOfWeek())) == '0') {
+            throw new BookingException("Restaurant close at this day");
+        }
+
+        //check open close
+        LocalTime localTimeCheck = LocalTime.of(booking.getDateTime().getHour(), booking.getDateTime().getMinute());
+        LocalTime localTimeRestaurantOpen = LocalTime.parse(restaurant.getOpenTime());
+        LocalTime localTimeRestaurantClose = LocalTime.parse(restaurant.getCloseTime());
+
+        if(localTimeCheck.isBefore(localTimeRestaurantOpen) || localTimeCheck.isAfter(localTimeRestaurantClose)) throw new BookingException("Restaurant close at this time");
 
         bookingRepository.save(booking);
     }

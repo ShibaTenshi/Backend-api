@@ -2,14 +2,10 @@ package ku.cs.backendapi.controller;
 
 import ku.cs.backendapi.entity.Category;
 import ku.cs.backendapi.exception.TokenException;
-import ku.cs.backendapi.model.SearchRestaurantDTO;
+import ku.cs.backendapi.model.*;
 import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exception.AuthException;
 import ku.cs.backendapi.exception.UserNotFoundException;
-import ku.cs.backendapi.model.RegisterRestaurant;
-import ku.cs.backendapi.model.SelectedRestaurant;
-import ku.cs.backendapi.model.UnApprovedRestaurantTitle;
-import ku.cs.backendapi.model.UnapprovedRestaurant;
 import ku.cs.backendapi.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +26,24 @@ public class ContentController {
     }
 
     @GetMapping("/restaurantPage")
-    public List<SearchRestaurantDTO> getCategory(@RequestParam String query, int page) {
+    public List<SearchRestaurantDTO> getRestaurantPage(@RequestParam String query, int page) {
         return service.getAllRestaurantPageSearch(page, query);
+    }
+
+    @GetMapping("/restaurantPage/category")
+    public List<SearchRestaurantDTO> getRestaurantPageCategory(@RequestParam String category, int page) {
+        return service.getAllRestaurantPageSearchCategory(page, category);
     }
 
     @GetMapping("/restaurantInfo")
     public SelectedRestaurant getRestaurantInfo(@RequestParam String tokenId) throws UserNotFoundException, TokenException {
         return service.getRestaurantInfo(tokenId);
     }
+
+    @GetMapping("/viewRestaurant")
+    public RestaurantViewInfoDTO viewRestaurant(@RequestParam String name) throws UserNotFoundException, TokenException {
+        return service.viewRestaurantInfoCustomer(name);
+    }
+
+
 }

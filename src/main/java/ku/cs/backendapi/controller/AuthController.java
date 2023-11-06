@@ -32,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public void logout(@RequestParam String token) {
-        service.removeToken(UUID.fromString(token));
+    public void logout(@RequestParam String tokenId) {
+        service.removeToken(UUID.fromString(tokenId));
     }
 }

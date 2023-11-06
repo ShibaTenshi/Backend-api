@@ -54,7 +54,7 @@ public class RestaurantBookingService {
                 dto.setDate(formatDate(booking.getDateTime()));
                 dto.setTime(formatTime(booking.getDateTime()));
                 dto.setName(booking.getCustomer().getName());
-                dto.setSeatNumber(booking.getTableType().getSeatNumber());
+                //dto.setSeatNumber(booking.getTableType().getSeatNumber());
 
                 restaurantBookingDTOList.add(dto);
             }

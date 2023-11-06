@@ -15,7 +15,7 @@ public class RestaurantTableType {
     private UUID id;
     private int numOfTable;
 
-    @OneToOne
+    @ManyToOne
     private TableType tableType;
 
     @ManyToOne

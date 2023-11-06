@@ -19,11 +19,11 @@ public class Booking {
     @ManyToOne
     private Customer customer;
 
-    @OneToOne
+    @ManyToOne
     private Restaurant restaurant;
 
-    @OneToOne
-    private TableType tableType;
+    @ManyToOne
+    private RestaurantTableType restaurantTableType;
 
     @Enumerated(EnumType.STRING)
     private Status status;

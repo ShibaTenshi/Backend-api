@@ -1,6 +1,7 @@
 package ku.cs.backendapi.controller;
 
-import ku.cs.backendapi.exception.TokenNotfoundException;
+import ku.cs.backendapi.exception.AuthException;
+import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.CustomerProfileDTO;
 import ku.cs.backendapi.model.ManageProfileCustomer;
@@ -10,27 +11,19 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin
 @RequestMapping("/customer")
 public class ManageProfileController {
     @Autowired
     private ManageProfileService manageProfileService;
 
-    @GetMapping
-    public CustomerProfileDTO getUser(@RequestParam String tokenId) throws UserNotFoundException, TokenNotfoundException {
+    @GetMapping("/profile")
+    public CustomerProfileDTO getUser(@RequestParam String tokenId) throws UserNotFoundException, TokenException {
         return manageProfileService.getUser(tokenId);
     }
 
-    @PostMapping("/customerManageProfile")
-    public void changePassword(@RequestParam String tokenId,
-                                      @RequestBody ManageProfileCustomer manageProfileCustomer) throws UserNotFoundException, TokenNotfoundException {
-        manageProfileService.changePassword(tokenId, manageProfileCustomer);
+    @PostMapping("/profile/changePassword")
+    public void changePassword(@RequestParam String tokenId, String oldPassword, String newPassword) throws UserNotFoundException, TokenException, AuthException {
+        manageProfileService.changePassword(tokenId, oldPassword, newPassword);
     }
-
-    @PostMapping("/customerManageProfile")
-    public void changeProfilePicture(@RequestParam String tokenId,
-                               @RequestBody ManageProfileCustomer manageProfileCustomer) throws UserNotFoundException, TokenNotfoundException {
-        manageProfileService.changeProfilePicture(tokenId, manageProfileCustomer);
-    }
-
 }

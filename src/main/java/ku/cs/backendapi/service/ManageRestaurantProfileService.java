@@ -43,12 +43,12 @@ public class ManageRestaurantProfileService {
         return ownerProfileDTO;
     }
 
-    public void changeOwnerPassword(ManageOwnerProfileRequest request) throws UserNotFoundException, TokenException, AuthException {
-        Restaurant restaurant = (Restaurant) tokenService.getUser(UUID.fromString(request.getTokenId()));
+    public void changeOwnerPassword(String tokenId, String oldPassword, String newPassword) throws UserNotFoundException, TokenException, AuthException {
+        Restaurant restaurant = (Restaurant) tokenService.getUser(UUID.fromString(tokenId));
 
-        if (request.getOldPassword() != null && request.getNewPassword() != null) {
-            if (BCrypt.checkpw(request.getOldPassword(), restaurant.getPassword())) {
-                String hashedPassword = passwordEncoder.encode(request.getNewPassword());
+        if (oldPassword != null && newPassword != null) {
+            if (BCrypt.checkpw(oldPassword, restaurant.getPassword())) {
+                String hashedPassword = passwordEncoder.encode(newPassword);
                 restaurant.setPassword(hashedPassword);
                 restaurantRepository.save(restaurant);
             } else throw new AuthException("Password Mismatch");
