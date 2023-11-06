@@ -15,8 +15,11 @@
 ศิวกร ภาสว่าง 6410451423 หมู่ 200
 
 
-##About
+# About
 
 
-Repository ส่วนนี้เป็นในส่วนการทำงานของ backend โดยจะมีการสร้างฟังก์ชั่นส่งค่าไปให้กับ API เพื่อนำไปใช้กับ Front-End ของ Shibaqueue, Shibastation และ Shibaadmin
+Repository ส่วนนี้เป็นในส่วนการทำงานของ backend โดยจะมีการสร้างฟังก์ชั่นส่งค่าไปให้กับ API เพื่อนำไปใช้กับ 
+
+
+Front-End ของ Shibaqueue, Shibastation และ Shibaadmin
 
