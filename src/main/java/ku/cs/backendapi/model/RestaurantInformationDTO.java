@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class RestaurantInformationDTO {
-    private Category category;
+    private String categoryName;
     private String restaurantName;
     private String description;
     private String openTime;
