@@ -90,6 +90,7 @@ public class ContentService {
         ArrayList<SearchRestaurantDTO> searchRestaurantDTOS = new ArrayList<>();
         for (Restaurant r : pages.toList()) {
             if(!getAll && !r.getRestaurantName().contains(query)) continue;
+            if(r.getStatus() == RestaurantStatus.UNAPPROVED) continue;
 
             String imgUrl = restTemplate.getForObject(URL.STORAGE + "/restaurant/image/logo/" + r.getRestaurantName(), String.class);
 
@@ -112,6 +113,7 @@ public class ContentService {
         ArrayList<SearchRestaurantDTO> searchRestaurantDTOS = new ArrayList<>();
         for (Restaurant r : pages.toList()) {
             if(!getAll && !r.getCategory().getCategoryName().contains(category)) continue;
+            if(r.getStatus() == RestaurantStatus.UNAPPROVED) continue;
 
             String imgUrl = restTemplate.getForObject(URL.STORAGE + "/restaurant/image/logo/" + r.getRestaurantName(), String.class);
 
