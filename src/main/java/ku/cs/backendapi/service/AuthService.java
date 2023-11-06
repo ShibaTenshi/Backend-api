@@ -80,8 +80,8 @@ public class AuthService {
             restTemplate.postForObject(URL.STORAGE + "/remove/customer/{name}", null, String.class, user.getUsername());
         }
         if(user instanceof Restaurant) {
-            restaurantTableTypeRepository.deleteAll(restaurantTableTypeRepository.findByRestaurant((Restaurant) user));
             bookingRepository.deleteAll(bookingRepository.findAllByRestaurant((Restaurant) user));
+            restaurantTableTypeRepository.deleteAll(restaurantTableTypeRepository.findByRestaurant((Restaurant) user));
             restaurantRepository.delete((Restaurant) user);
             restTemplate.postForObject(URL.STORAGE + "/remove/restaurant/{name}", null, String.class, ((Restaurant) user).getRestaurantName());
         }
