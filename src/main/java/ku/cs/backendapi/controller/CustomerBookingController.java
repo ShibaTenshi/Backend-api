@@ -21,6 +21,11 @@ public class CustomerBookingController {
         return service.getAllCustomerBookingHistory(tokenId);
     }
 
+    @GetMapping
+    public List<CustomerBooking> getCustomerCurrentBooking(@RequestParam String tokenId) throws UserNotFoundException, TokenException {
+        return service.getCustomerCurrentBooking(tokenId);
+    }
+
     @PostMapping("/cancel")
     public void cancelBooking(@RequestParam String bookingId) throws UserNotFoundException {
         service.cancelBooking(bookingId);
