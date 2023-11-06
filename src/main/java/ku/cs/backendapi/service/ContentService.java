@@ -7,6 +7,8 @@ import ku.cs.backendapi.exception.AuthException;
 import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
 import ku.cs.backendapi.model.SearchRestaurantDTO;
+import ku.cs.backendapi.model.RegisterRestaurant;
+import ku.cs.backendapi.model.SelectedRestaurant;
 import ku.cs.backendapi.model.UnApprovedRestaurantTitle;
 import ku.cs.backendapi.model.UnapprovedRestaurant;
 import ku.cs.backendapi.repository.CategoryRepository;
@@ -85,12 +87,23 @@ public class ContentService {
                 PageRequest.of(page - 1, 2));
 
         ArrayList<SearchRestaurantDTO> searchRestaurantDTOS = new ArrayList<>();
-        for(Restaurant r : pages.toList()) {
+        for (Restaurant r : pages.toList()) {
             SearchRestaurantDTO temp = new SearchRestaurantDTO();
             temp.setCategory(r.getCategory().getCategoryName());
             temp.setRestaurantName(r.getRestaurantName());
             searchRestaurantDTOS.add(temp);
         }
         return searchRestaurantDTOS;
+    }
+
+    public SelectedRestaurant getRestaurantInfo(String tokenId) throws UserNotFoundException, TokenException {
+        Restaurant restaurant = (Restaurant) tokenService.getUser(UUID.fromString(tokenId));
+
+        Optional<Restaurant> record = restaurantRepository.findById(restaurant.getId());
+        if(record.isEmpty()) throw new UserNotFoundException("Restaurant Not Found");
+
+        SelectedRestaurant selectedRestaurant = modelMapper.map(record.get(), SelectedRestaurant.class);
+        selectedRestaurant.setCategory(record.get().getCategory().getCategoryName());
+        return selectedRestaurant;
     }
 }
