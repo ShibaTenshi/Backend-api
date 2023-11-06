@@ -6,12 +6,16 @@ import ku.cs.backendapi.entity.Restaurant;
 import ku.cs.backendapi.exception.AuthException;
 import ku.cs.backendapi.exception.TokenException;
 import ku.cs.backendapi.exception.UserNotFoundException;
+import ku.cs.backendapi.model.SearchRestaurantDTO;
 import ku.cs.backendapi.model.UnApprovedRestaurantTitle;
 import ku.cs.backendapi.model.UnapprovedRestaurant;
 import ku.cs.backendapi.repository.CategoryRepository;
 import ku.cs.backendapi.repository.RestaurantRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
@@ -46,12 +50,12 @@ public class ContentService {
 
     //Admin
     public List<UnApprovedRestaurantTitle> getUnapprovedRestaurantList(String tokenId) throws AuthException, TokenException {
-        if(!tokenService.isAdmin(UUID.fromString(tokenId))) throw new AuthException("User Is Not Admin");
+        if (!tokenService.isAdmin(UUID.fromString(tokenId))) throw new AuthException("User Is Not Admin");
 
         List<Restaurant> unapproved = restaurantRepository.findAllByStatus(RestaurantStatus.UNAPPROVED);
         List<UnApprovedRestaurantTitle> unApprovedRestaurantTitles = new ArrayList<>();
 
-        for(Restaurant restaurant : unapproved) {
+        for (Restaurant restaurant : unapproved) {
             UnApprovedRestaurantTitle temp = modelMapper.map(restaurant, UnApprovedRestaurantTitle.class);
             temp.setCategory(restaurant.getCategory().getCategoryName());
             temp.setDateAdded(restaurant.getDateAdded().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
@@ -63,15 +67,30 @@ public class ContentService {
 
     //Admin
     public UnapprovedRestaurant getUnapprovedRestaurant(String tokenId, String id) throws UserNotFoundException, AuthException, TokenException {
-        if(!tokenService.isAdmin(UUID.fromString(tokenId))) throw new AuthException("User Is Not Admin");
+        if (!tokenService.isAdmin(UUID.fromString(tokenId))) throw new AuthException("User Is Not Admin");
 
         Optional<Restaurant> record = restaurantRepository.findById(UUID.fromString(id));
-        if(record.isEmpty()) throw new UserNotFoundException("Restaurant Not Found");
-        if(record.get().getStatus() == RestaurantStatus.APPROVED) throw new AuthException("Restaurant Already Approved");
+        if (record.isEmpty()) throw new UserNotFoundException("Restaurant Not Found");
+        if (record.get().getStatus() == RestaurantStatus.APPROVED)
+            throw new AuthException("Restaurant Already Approved");
 
         UnapprovedRestaurant unapprovedRestaurant = modelMapper.map(record.get(), UnapprovedRestaurant.class);
         unapprovedRestaurant.setDateAdded(record.get().getDateAdded().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)));
         unapprovedRestaurant.setId(record.get().getId().toString());
         return unapprovedRestaurant;
+    }
+
+    public List<SearchRestaurantDTO> getAllRestaurantPageSearch(int page, String query) {
+        Page<Restaurant> pages = restaurantRepository.findAll(
+                PageRequest.of(page - 1, 2));
+
+        ArrayList<SearchRestaurantDTO> searchRestaurantDTOS = new ArrayList<>();
+        for(Restaurant r : pages.toList()) {
+            SearchRestaurantDTO temp = new SearchRestaurantDTO();
+            temp.setCategory(r.getCategory().getCategoryName());
+            temp.setRestaurantName(r.getRestaurantName());
+            searchRestaurantDTOS.add(temp);
+        }
+        return searchRestaurantDTOS;
     }
 }
