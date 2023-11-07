@@ -23,3 +23,9 @@ Repository ส่วนนี้เป็นในส่วนการทำง
 
 Front-End ของ Shibaqueue, Shibastation และ Shibaadmin
 
+# Build
+```bash
+mvn clean
+mvn package -dskipTest
+```
+
